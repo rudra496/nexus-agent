@@ -1,0 +1,8 @@
+{
+  "repository_topics": [
+    "ai-agent", "local-ai", "ollama", "litellm", "graphrag",
+    "self-evolving", "privacy-first", "cli", "terminal", "python",
+    "autonomous-agent", "skill-tree", "code-agent", "zero-config",
+    "llm", "networkx", "on-device", "offline-ai", "ai-framework"
+  ]
+}

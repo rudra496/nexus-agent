@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  nexus-agent:
+    build: .
+    image: rudra496/nexus-agent:latest
+    container_name: nexus-agent
+    volumes:
+      - .:/workspace
+    stdin_open: true
+    tty: true
+    command: run "Hello, Nexus!"
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+
+volumes:
+  ollama-data:

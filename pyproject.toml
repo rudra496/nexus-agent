@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "nexus-agent"
+version = "0.2.0"
+description = "The Zero-Config, Self-Evolving Local AI Agent Framework"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Rudra Sarker", email = "rudrasarker130@gmail.com"}
+]
+keywords = ["ai-agent", "local-ai", "ollama", "graphrag", "self-evolving", "privacy-first", "cli"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+    "litellm>=1.0.0",
+    "requests>=2.31.0",
+    "networkx>=3.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+web = ["fastapi>=0.104.0", "uvicorn>=0.24.0"]
+yaml = ["pyyaml>=6.0"]
+all = ["fastapi>=0.104.0", "uvicorn>=0.24.0", "pyyaml>=6.0"]
+dev = ["pytest>=7.0", "pytest-cov", "black", "ruff", "mypy"]
+
+[project.scripts]
+nexus = "cli:app"
+
+[project.urls]
+Homepage = "https://rudra496.github.io/nexus-agent"
+Repository = "https://github.com/rudra496/nexus-agent"
+Documentation = "https://rudra496.github.io/nexus-agent"
+Issues = "https://github.com/rudra496/nexus-agent/issues"
+Changelog = "https://github.com/rudra496/nexus-agent/blob/main/CHANGELOG.md"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

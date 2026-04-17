@@ -1,93 +1,117 @@
-# Advanced NexusAgent Tutorials
+# Advanced Tutorial
 
-Welcome to the advanced tutorials for NexusAgent! This guide goes beyond basic setup and dives deep into the inner workings of Nexus's core features: **The Skill Tree Ecosystem** and **GraphRAG Memory Architecture**. By mastering these, you can extend Nexus to perform highly complex and proprietary tasks without ever leaving your terminal.
+## Table of Contents
 
----
+1. [Setting Up Multiple Models](#multiple-models)
+2. [Building Custom Skills](#custom-skills)
+3. [Writing Plugins](#writing-plugins)
+4. [GraphRAG Memory Deep Dive](#graphrag-deep-dive)
+5. [Web Dashboard](#web-dashboard)
+6. [Sandboxed Execution](#sandboxed-execution)
+7. [Exporting and Sharing](#exporting)
+8. [Docker Deployment](#docker-deployment)
+9. [Performance Optimization](#performance)
+10. [Troubleshooting](#troubleshooting)
 
-## 1. The Skill Tree Ecosystem
+## Multiple Models
 
-By default, Nexus is born with a minimal set of tools. It relies on its **Skill Tree Engine** to generate Python snippets dynamically at runtime and stores them permanently in your local workspace under `.nexus/skills/`.
-
-### How It Works
-
-1. **Task Analysis**: When you issue a prompt, Nexus evaluates if it currently possesses the tools to execute the task efficiently.
-2. **Code Generation**: If a tool is missing, Nexus uses the local LLM to write a robust Python script to accomplish the task.
-3. **Skill Registration**: The agent tags its output with `[NEW SKILL: skill_name]`. The internal parser intercepts this tag and saves the code snippet into `.nexus/skills/<skill_name>.json`.
-4. **Future Execution**: On subsequent requests requiring similar functionality, Nexus retrieves the skill from the tree, drastically reducing response time and avoiding redundant code generation.
-
-### Example Scenario
-
-You ask Nexus: 
-> *"Create a script to parse my Nginx system logs and find the top 5 error rates by IP."*
-
-1. Nexus searches its GraphRAG memory and realizes it has no `nginx_log_parser` skill.
-2. It writes a robust `nginx_log_parser.py` snippet and outputs it with the tag `[NEW SKILL: parse_nginx_logs]`.
-3. Nexus intercepts this tag and saves the code into `.nexus/skills/parse_nginx_logs.json`.
-4. The next time you ask, *"Analyze yesterday's Nginx logs"*, Nexus injects this custom skill into its context window, executing your proprietary code perfectly.
-
-### Manually Managing Skills
-
-Because skills are just JSON files containing Python code, you can easily version control, share, or edit them:
-
-- **Edit a Skill**: Open `.nexus/skills/parse_nginx_logs.json` and tweak the Python snippet to improve performance. Nexus will use the updated code on the next run.
-- **Share Skills**: You can commit the `.nexus/skills` directory to your repository, allowing your entire team to benefit from the custom tools Nexus has developed for your specific project.
-
----
-
-## 2. GraphRAG Memory Architecture
-
-When you run `nexus evolve`, the agent doesn't just do a simple string search across your files. It builds a complex **NetworkX graph** to understand the semantic relationships within your codebase.
-
-### Graph Components
-
-- **Nodes**: Represent individual files, classes, functions, and key data structures.
-- **Edges**: Represent relationships like `IMPORTS`, `INHERITS_FROM`, `CALLS`, and `DEPENDS_ON`.
-
-### Why GraphRAG beats Traditional RAG
-
-Traditional Retrieval-Augmented Generation (RAG) relies on vector embeddings and chunking, which often loses context across file boundaries. 
-
-If you ask: *"Why is the user authentication module failing?"*
-
-- **Traditional RAG** might retrieve `auth.py` and maybe a random file that mentions "authentication", missing the actual root cause.
-- **GraphRAG (Nexus)** retrieves `auth.py`, traverses the graph to find that `auth.py` depends on `database.py` (which recently had a schema change), and pulls both files into the LLM context.
-
-This targeted retrieval gives the local LLM the perfect context window without blowing up token limits or confusing the model with irrelevant files.
-
-### Forcing a Memory Update
-
-Nexus updates its memory incrementally, but if you've done a massive refactor (e.g., renaming directories, changing architectural patterns), you should force a clean rebuild:
+Configure different models for different tasks:
 
 ```bash
-# Clear the existing graph database
-rm -rf .nexus/memory/
-
-# Rebuild the graph from scratch
-nexus evolve
+nexus config set model.default ollama/codellama
+nexus run "Write a Python sorting algorithm" --model ollama/llama3
 ```
 
----
-
-## 3. Customizing the Local LLM (LiteLLM Integration)
-
-Nexus is powered by [LiteLLM](https://github.com/BerriAI/litellm) under the hood. While it defaults to `ollama/llama3`, you can configure it to use any model.
-
-To switch models, you can export the following environment variable before running Nexus:
+Or use cloud models:
 
 ```bash
-# Use a different local Ollama model
-export NEXUS_MODEL="ollama/phi3"
-
-# Or, if you want to use a cloud provider (requires API keys)
-export NEXUS_MODEL="gpt-4o"
-export OPENAI_API_KEY="sk-..."
+export ANTHROPIC_API_KEY="sk-ant-..."
+nexus run "Explain quantum computing" --model anthropic/claude-3-sonnet
 ```
 
-*Note: While cloud models are supported, we highly recommend using local models to maintain the absolute privacy guarantees of NexusAgent.*
+## Custom Skills
 
----
+Skills are auto-generated, but you can also create them manually:
 
-## Next Steps
+```python
+# .nexus/skills/my_calculator.py
 
-- Explore the [API Documentation](index.html) for detailed class and function references.
-- Join the community to share your custom Skill Trees!
+def calculate(expression: str) -> float:
+    """Evaluate a mathematical expression safely."""
+    allowed = set("0123456789+-*/(). ")
+    if not all(c in allowed for c in expression):
+        raise ValueError("Invalid characters")
+    return eval(expression)
+```
+
+## Writing Plugins
+
+See [Plugin Guide](plugin-guide.md) for the complete plugin development guide.
+
+## GraphRAG Deep Dive
+
+The memory system uses NetworkX to build a knowledge graph:
+
+- **Nodes** represent files, concepts, and entities
+- **Edges** represent relationships between them
+- **Retrieval** uses graph traversal to find relevant context
+
+```python
+from nexus.agent import NexusAgent
+
+agent = NexusAgent()
+agent.memory.add_node("concept:python", {"type": "concept", "importance": 0.9})
+agent.memory.add_edge("concept:python", "file:main.py", {"relationship": "used_in"})
+context = agent.memory.retrieve_context("How is Python used?")
+```
+
+## Web Dashboard
+
+```bash
+nexus web --port 8080
+# Open http://localhost:8080
+```
+
+## Sandboxed Execution
+
+All auto-generated skills run in a sandboxed subprocess:
+
+```python
+from nexus.sandbox import Sandbox
+
+sandbox = Sandbox(timeout=10, max_memory_mb=128)
+result = sandbox.execute("import time; time.sleep(5)")
+print(result.timed_out)  # False (5s < 10s timeout)
+```
+
+## Exporting
+
+```bash
+nexus export -f json -k skills -o skills.json
+nexus export -f markdown -k report -o report.md
+nexus export -f skillpack -o my-skills.zip
+```
+
+## Docker Deployment
+
+```bash
+docker-compose up -d
+docker-compose exec nexus-agent nexus run "Hello from Docker!"
+```
+
+## Performance Optimization
+
+- Increase `memory.max_nodes` for larger projects
+- Use `ollama/codellama` for code tasks (faster)
+- Disable web dashboard when not needed
+- Use `nexus plugin reload` sparingly
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| "Could not connect to Ollama" | Run `ollama serve` |
+| Model not found | Run `ollama pull llama3` |
+| Plugin not loading | Check `.nexus/plugins/` directory |
+| Memory full | Increase `memory.max_nodes` |
+| Slow responses | Use a smaller model or increase `max_tokens` |

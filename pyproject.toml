@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.backends._legacy:_Backend"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "nexus-agent"
@@ -36,10 +36,10 @@ dependencies = [
 web = ["fastapi>=0.104.0", "uvicorn>=0.24.0"]
 yaml = ["pyyaml>=6.0"]
 all = ["fastapi>=0.104.0", "uvicorn>=0.24.0", "pyyaml>=6.0"]
-dev = ["pytest>=7.0", "pytest-cov", "black", "ruff", "mypy"]
+dev = ["pytest>=7.0", "pytest-cov", "ruff", "mypy"]
 
 [project.scripts]
-nexus = "cli:app"
+nexus = "src.cli:app"
 
 [project.urls]
 Homepage = "https://rudra496.github.io/nexus-agent"
@@ -51,6 +51,11 @@ Changelog = "https://github.com/rudra496/nexus-agent/blob/main/CHANGELOG.md"
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+exclude = [".nexus", ".git", "__pycache__"]
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = [".nexus", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

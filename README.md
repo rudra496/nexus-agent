@@ -235,18 +235,19 @@ See [docs/api-reference.md](docs/api-reference.md) for complete API docs.
 
 ## 📊 Comparison
 
-| Feature | NexusAgent | Aider | Continue | Cursor | OpenHands |
-|---------|-----------|-------|----------|--------|-----------|
-| **Privacy-First (Local)** | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Feature | NexusAgent | Aider | Continue.dev | Cursor | OpenHands |
+|---------|-----------|-------|-------------|--------|-----------|
+| **Runs 100% Locally** | ✅ | ✅ | ✅ | ❌ | ❌ |
 | **GraphRAG Memory** | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Auto Skill Generation** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Self-Evolving Skills** | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **Plugin System** | ✅ | ❌ | ✅ | ✅ | ✅ |
 | **Web Dashboard** | ✅ | ❌ | ❌ | ✅ | ✅ |
-| **Zero Config** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Zero-Config Setup** | ✅ | ⚠️ | ⚠️ | ✅ | ⚠️ |
 | **Sandboxed Execution** | ✅ | ❌ | ❌ | ❌ | ✅ |
-| **Self-Evolving** | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **CLI** | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Open Source** | ✅ | ✅ | ✅ | ❌ | ✅ |
+| **CLI Interface** | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Open Source (MIT)** | ✅ | ✅ | ✅ (Apache) | ❌ | ✅ |
+
+> ⚠️ = Requires some configuration. This comparison reflects publicly available documentation as of April 2026 and is provided in good faith — please verify for your specific use case.
 
 ## 🗺 Roadmap
 
@@ -298,15 +299,18 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 Please read our [Code of Conduct](CODE_OF_CONDUCT.md) and [Security Policy](SECURITY.md).
 
-## 🏆 Benchmarks
+## ⚡ Performance
 
-| Metric | NexusAgent v0.2 |
-|--------|-----------------|
-| Cold Start | < 2s |
-| Memory Retrieval | < 50ms (10k nodes) |
-| Skill Execution | < 100ms (sandboxed) |
-| Config Load | < 10ms |
-| Plugin Hot-Reload | < 20ms |
+NexusAgent is designed for minimal overhead. Key performance characteristics:
+
+| Component | Design Target | Notes |
+|-----------|--------------|-------|
+| Startup | Near-instant | Only loads config + existing skills |
+| Graph Retrieval | Proportional to graph size | Keyword-based lookup over NetworkX |
+| Skill Execution | Bounded by sandbox timeout | Configurable, default 30s |
+| Plugin Load | On-demand | Loaded once, hot-reloaded on change |
+
+> These are architectural design targets, not formal benchmarks. Actual performance depends on your hardware, graph size, and model inference time.
 
 ## 📄 License
 

@@ -145,10 +145,10 @@
     <!-- Stats -->
     <section class="py-12 px-4 border-y border-gray-200 dark:border-gray-800">
         <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="100">0</p><p class="text-sm text-gray-500 mt-1">GitHub Stars</p></div>
-            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="500">0</p><p class="text-sm text-gray-500 mt-1">Downloads</p></div>
-            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="10">0</p><p class="text-sm text-gray-500 mt-1">Features</p></div>
-            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="100">0</p><p class="text-sm text-gray-500 mt-1">% Local</p></div>
+            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="6">0</p><p class="text-sm text-gray-500 mt-1">Core Modules</p></div>
+            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="30">0</p><p class="text-sm text-gray-500 mt-1">+ Test Cases</p></div>
+            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="10">0</p><p class="text-sm text-gray-500 mt-1">CLI Commands</p></div>
+            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="100">0</p><p class="text-sm text-gray-500 mt-1">% Open Source</p></div>
         </div>
     </section>
 
@@ -216,30 +216,34 @@
     <!-- Comparison -->
     <section id="comparison" class="py-20 px-4 bg-gray-100 dark:bg-gray-900">
         <div class="max-w-5xl mx-auto">
-            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12">Why NexusAgent?</h2>
+            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">Why NexusAgent?</h2>
+            <p class="text-center text-gray-500 mb-12 text-sm">Based on publicly available documentation as of April 2026. Please verify for your use case.</p>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
-                    <thead><tr class="border-b border-gray-300 dark:border-gray-700"><th class="text-left py-3 px-4">Feature</th><th class="py-3 px-4 text-cyan-500">NexusAgent</th><th class="py-3 px-4">Aider</th><th class="py-3 px-4">Cursor</th><th class="py-3 px-4">OpenHands</th></tr></thead>
+                    <thead><tr class="border-b border-gray-300 dark:border-gray-700"><th class="text-left py-3 px-4">Feature</th><th class="py-3 px-4 text-cyan-500">NexusAgent</th><th class="py-3 px-4">Aider</th><th class="py-3 px-4">Continue.dev</th><th class="py-3 px-4">Cursor</th><th class="py-3 px-4">OpenHands</th></tr></thead>
                     <tbody>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Privacy-First</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">GraphRAG Memory</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Auto Skill Gen</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Plugin System</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td></tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Zero Config</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
-                        <tr><td class="py-2 px-4">Web Dashboard</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td></tr>
+                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Runs 100% Locally</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
+                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">GraphRAG Memory</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
+                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Self-Evolving Skills</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
+                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Plugin System</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td></tr>
+                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Zero-Config Setup</td><td class="text-center text-green-500">✅</td><td class="text-center text-yellow-500">⚠️</td><td class="text-center text-yellow-500">⚠️</td><td class="text-center text-green-500">✅</td><td class="text-center text-yellow-500">⚠️</td></tr>
+                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">CLI Interface</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
+                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Sandboxed Execution</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-green-500">✅</td></tr>
+                        <tr><td class="py-2 px-4">Open Source</td><td class="text-center text-green-500">MIT</td><td class="text-center text-green-500">Apache</td><td class="text-center text-green-500">Apache</td><td class="text-center text-red-400">Proprietary</td><td class="text-center text-green-500">MIT</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials -->
+    <!-- Key Principles -->
     <section class="py-20 px-4">
         <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-12">What People Are Saying</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <blockquote class="glass rounded-2xl p-6 text-left fade-in"><p class="text-gray-600 dark:text-gray-300 italic">"NexusAgent's self-evolving skill system is genius. It literally wrote a web scraper I didn't know I needed."</p><cite class="block mt-4 text-sm text-gray-500 not-italic">— Open Source Contributor</cite></blockquote>
-                <blockquote class="glass rounded-2xl p-6 text-left fade-in"><p class="text-gray-600 dark:text-gray-300 italic">"Finally an AI agent that respects my privacy and doesn't phone home. GraphRAG memory is a game changer."</p><cite class="block mt-4 text-sm text-gray-500 not-italic">— Privacy Advocate & Developer</cite></blockquote>
+            <h2 class="text-3xl font-bold mb-12">Built on Principles</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass rounded-2xl p-6 fade-in"><div class="text-3xl mb-3">🔒</div><h3 class="font-semibold text-lg mb-2">Privacy by Design</h3><p class="text-gray-500 text-sm">No telemetry, no tracking, no data leaves your machine. Your code stays yours.</p></div>
+                <div class="glass rounded-2xl p-6 fade-in"><div class="text-3xl mb-3">🌱</div><h3 class="font-semibold text-lg mb-2">Self-Improving</h3><p class="text-gray-500 text-sm">The more you use it, the more capable it becomes. Skills accumulate over time.</p></div>
+                <div class="glass rounded-2xl p-6 fade-in"><div class="text-3xl mb-3">🔓</div><h3 class="font-semibold text-lg mb-2">Open & Extensible</h3><p class="text-gray-500 text-sm">MIT licensed with a plugin system. Modify, extend, and share freely.</p></div>
             </div>
         </div>
     </section>
@@ -249,11 +253,11 @@
         <div class="max-w-3xl mx-auto">
             <h2 class="text-3xl font-bold text-center mb-12">Roadmap</h2>
             <div class="space-y-6">
-                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-green-500 font-bold">✅</span><div><h3 class="font-semibold">v0.1 — Core Agent</h3><p class="text-gray-500 text-sm">GraphRAG memory, auto skills, CLI, Ollama integration</p></div></div>
-                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-green-500 font-bold">✅</span><div><h3 class="font-semibold">v0.2 — Plugins & Dashboard</h3><p class="text-gray-500 text-sm">Plugin system, web dashboard, sandboxed execution, export</p></div></div>
-                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-yellow-500 font-bold">🔜</span><div><h3 class="font-semibold">v0.3 — Multi-Agent</h3><p class="text-gray-500 text-sm">Multi-agent orchestration, task delegation, collaborative memory</p></div></div>
-                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-gray-400 font-bold">📋</span><div><h3 class="font-semibold">v0.4 — Voice & IDE</h3><p class="text-gray-500 text-sm">Voice interface, VS Code extension, enhanced context</p></div></div>
-                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-gray-400 font-bold">📋</span><div><h3 class="font-semibold">v1.0 — Production</h3><p class="text-gray-500 text-sm">Cloud sync (encrypted), mobile app, enterprise features</p></div></div>
+                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-green-500 font-bold">✅</span><div><h3 class="font-semibold">v0.1 — Core Agent</h3><p class="text-gray-500 text-sm">GraphRAG memory (NetworkX), auto skill generation, CLI (run, evolve, status, skills), LiteLLM + Ollama</p></div></div>
+                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-green-500 font-bold">✅</span><div><h3 class="font-semibold">v0.2 — Plugins & Dashboard</h3><p class="text-gray-500 text-sm">Config management (YAML/JSON), plugin system with hot-reload, FastAPI dashboard, sandboxed execution, export (JSON/Markdown/ZIP), self-updater, Docker, CI/CD, 30+ tests</p></div></div>
+                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-yellow-500 font-bold">🚧</span><div><h3 class="font-semibold">v0.3 — Multi-Agent</h3><p class="text-gray-500 text-sm">Multi-agent orchestration, task delegation & routing, collaborative shared memory, agent communication protocol</p></div></div>
+                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-gray-400 font-bold">📋</span><div><h3 class="font-semibold">v0.4 — Voice & IDE</h3><p class="text-gray-500 text-sm">Voice interface (Whisper + TTS), VS Code & JetBrains extensions, AST-aware code memory</p></div></div>
+                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-gray-400 font-bold">📋</span><div><h3 class="font-semibold">v1.0 — Production</h3><p class="text-gray-500 text-sm">Optional encrypted cloud sync, mobile companion, enterprise features (SSO, audit logs), skill marketplace</p></div></div>
             </div>
         </div>
     </section>
@@ -265,7 +269,7 @@
             <div class="space-y-3" id="faq-container">
                 <details class="glass rounded-xl group"><summary class="p-4 cursor-pointer font-medium flex justify-between items-center">Is my data sent anywhere?<span class="group-open:rotate-45 transition-transform text-xl">+</span></summary><div class="px-4 pb-4 text-gray-500 text-sm">No. NexusAgent runs 100% locally. Your prompts, code, and data never leave your machine. No telemetry, no tracking.</div></details>
                 <details class="glass rounded-xl group"><summary class="p-4 cursor-pointer font-medium flex justify-between items-center">What models does it support?<span class="group-open:rotate-45 transition-transform text-xl">+</span></summary><div class="px-4 pb-4 text-gray-500 text-sm">Any model supported by LiteLLM: Ollama (Llama, Mistral, CodeLlama, etc.), OpenAI (GPT-4), Anthropic (Claude), and more.</div></details>
-                <details class="glass rounded-xl group"><summary class="p-4 cursor-pointer font-medium flex justify-between items-center">How does self-evolution work?<span class="group-open:rotate-45 transition-transform text-xl">+</span></summary><div class="px-4 pb-4 text-gray-500 text-sm">When the agent encounters a task requiring a tool it doesn't have, it writes the tool code, tests it in a sandbox, and saves it to the skill tree. Over time, it accumulates reusable skills.</div></details>
+                <details class="glass rounded-xl group"><summary class="p-4 cursor-pointer font-medium flex justify-between items-center">How does self-evolution work?<span class="group-open:rotate-45 transition-transform text-xl">+</span></summary><div class="px-4 pb-4 text-gray-500 text-sm">When the agent encounters a task requiring a tool it doesn't have, it generates the tool code and saves it permanently to the skill tree. Future similar requests reuse the saved skill instead of regenerating code.</div></details>
                 <details class="glass rounded-xl group"><summary class="p-4 cursor-pointer font-medium flex justify-between items-center">Can I use it without Ollama?<span class="group-open:rotate-45 transition-transform text-xl">+</span></summary><div class="px-4 pb-4 text-gray-500 text-sm">Yes. Configure any LiteLLM-compatible provider via `nexus config set model.default openai/gpt-4`. You'll need an API key for cloud providers.</div></details>
                 <details class="glass rounded-xl group"><summary class="p-4 cursor-pointer font-medium flex justify-between items-center">How do I write plugins?<span class="group-open:rotate-45 transition-transform text-xl">+</span></summary><div class="px-4 pb-4 text-gray-500 text-sm">Create a Python file in `.nexus/plugins/` with functions named `nexus_*`. These become hooks that are called at various points in the agent lifecycle. See the plugin guide for details.</div></details>
             </div>

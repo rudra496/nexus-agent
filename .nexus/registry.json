@@ -1,0 +1,24 @@
+{
+  "version": "1.0",
+  "description": "Official NexusAgent skill registry",
+  "skills": [
+    {
+      "name": "parse_logs",
+      "description": "Parse system logs (nginx, apache, systemd) and extract error patterns",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/rudra496/nexus-agent/main/.nexus/skills/parse_logs.py"
+    },
+    {
+      "name": "csv_analyzer",
+      "description": "Analyze CSV files and output statistical summaries",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/rudra496/nexus-agent/main/.nexus/skills/csv_analyzer.py"
+    },
+    {
+      "name": "code_reviewer",
+      "description": "Review Python code for common issues and suggest improvements",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/rudra496/nexus-agent/main/.nexus/skills/code_reviewer.py"
+    }
+  ]
+}

@@ -252,17 +252,39 @@ See [docs/api-reference.md](docs/api-reference.md) for complete API docs.
 
 See [docs/roadmap.md](docs/roadmap.md) for the full roadmap.
 
-- [x] Core agent with GraphRAG memory
+### ✅ v0.1 — Core Agent
+- [x] GraphRAG memory with NetworkX
 - [x] Auto skill generation
+- [x] Basic CLI (`run`, `evolve`, `status`, `skills`)
+- [x] LiteLLM multi-model support + Ollama
+
+### ✅ v0.2 — Plugins & Dashboard
+- [x] Configuration management (YAML/JSON)
 - [x] Plugin system with hot-reload
-- [x] Web dashboard
-- [x] Sandboxed execution
-- [x] Export system
-- [ ] Multi-agent orchestration
-- [ ] Voice interface
-- [ ] VS Code extension
+- [x] Web dashboard (FastAPI + REST API)
+- [x] Sandboxed execution (timeout, memory limits)
+- [x] Export system (JSON, Markdown, ZIP skill packs)
+- [x] Self-updater + skill registry
+- [x] Docker support
+- [x] CI/CD + 30+ tests
+
+### 🚧 v0.3 — Multi-Agent (In Progress)
+- [ ] Multi-agent orchestration engine
+- [ ] Task delegation and routing
+- [ ] Collaborative shared memory
+- [ ] Agent communication protocol
+
+### 📋 v0.4 — Voice & IDE
+- [ ] Voice interface (Whisper + TTS)
+- [ ] VS Code & JetBrains extensions
+- [ ] AST-aware code memory
+
+### 🎯 v1.0 — Production
+- [ ] Encrypted cloud sync
 - [ ] Mobile companion app
-- [ ] Cloud sync (optional, encrypted)
+- [ ] Enterprise features (SSO, audit logs)
+- [ ] Skill marketplace
+- [ ] >90% test coverage
 
 ## 🤝 Contributing
 

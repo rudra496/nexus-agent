@@ -2,30 +2,53 @@
 
 All notable changes to NexusAgent will be documented in this file.
 
-## [0.2.0] - 2024-12-01
+## [0.2.0] - 2026-04-18
 
-### Added
-- **Plugin System** — Load external plugins from `.nexus/plugins/` with hot-reload support
-- **Web Dashboard** — Optional FastAPI dashboard for monitoring skills, memory, and task history
-- **Sandboxed Execution** — Isolated skill execution with subprocess isolation, timeout, and memory limits
-- **Export System** — Export skills, graphs, and reports as JSON, Markdown, or shareable skill packs
-- **Self-Updater** — Check for new versions, auto-update skills from a registry
-- **Configuration Management** — YAML/JSON config with `nexus config` CLI commands
+### 🚀 New Features
+- **Configuration Management** — YAML/JSON config with Pydantic models, `nexus config show/set/reset`
+- **Plugin System** — Load external plugins from `.nexus/plugins/`, hot-reload, hook discovery
+- **Web Dashboard** — FastAPI dashboard with REST API (`nexus web`)
+- **Sandboxed Execution** — Subprocess isolation with timeout and memory limits
+- **Export System** — JSON, Markdown reports, shareable ZIP skill packs (`nexus export`)
+- **Self-Updater** — PyPI version checking, skill registry updates (`nexus update`)
 - **Docker Support** — Dockerfile and docker-compose.yml
-- **CI/CD** — GitHub Actions for CI, release, and CodeQL security scanning
-- **Website** — Full modern website with SEO, dark/light theme, and responsive design
-- **Comprehensive Docs** — Configuration, plugin guide, API reference, advanced tutorial, roadmap
 
-### Changed
-- Overhauled README.md with badges, architecture diagram, comparison table
-- Updated CLI with new commands: `config`, `web`, `export`, `plugin`, `update`
-- Improved error handling and offline mode
+### 🧪 Testing
+- Comprehensive test suite with 30+ tests across all modules
+- Tests for agent, memory, skills, config, plugins, sandbox, export
 
-## [0.1.0] - 2024-10-15
+### 📦 Assets
+- Sample plugin (task logger) in `examples/plugins/`
+- 3 starter skills in `.nexus/skills/` (log parser, CSV analyzer, code reviewer)
+- Skill registry (`.nexus/registry.json`)
 
-### Added
+### 📚 Documentation
+- Configuration reference (`docs/configuration.md`)
+- Plugin guide (`docs/plugin-guide.md`)
+- API reference (`docs/api-reference.md`)
+- Roadmap (`docs/roadmap.md`)
+- Expanded advanced tutorial (`docs/advanced_tutorial.md`)
+
+### 🏗️ Infrastructure
+- CI pipeline (pytest on Python 3.10, 3.11, 3.12)
+- Release workflow (auto-publish to PyPI)
+- CodeQL security scanning
+- Dependabot for dependencies and actions
+- GitHub issue templates (bug report, feature request)
+- FUNDING.yml for sponsors
+
+### 🌐 Website
+- Complete rebuild with SEO optimization
+- Dark/light theme toggle
+- 9 feature cards, FAQ accordion, roadmap timeline, stats section
+- JSON-LD structured data, Open Graph, Twitter Card meta tags
+
+## [0.1.0] - 2026-04-17
+
+### 🎉 Initial Release
 - Core NexusAgent with GraphRAG memory (NetworkX)
-- Auto skill generation during runtime
-- Basic CLI with `run`, `evolve`, `status`, `skills` commands
-- LiteLLM integration for multi-model support
-- Ollama integration for local model execution
+- Auto skill generation from LLM responses
+- CLI commands: `run`, `evolve`, `status`, `skills`
+- LiteLLM multi-model support with Ollama integration
+- Graceful offline fallback mode
+- Basic documentation

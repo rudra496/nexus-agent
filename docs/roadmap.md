@@ -1,48 +1,58 @@
-# Roadmap
+# 🗺️ Roadmap
 
-## v0.1 — Core Agent ✅
+## v0.1 — Core Agent ✅ (Released)
 - [x] GraphRAG memory with NetworkX
-- [x] Auto skill generation
-- [x] Basic CLI (run, evolve, status, skills)
+- [x] Auto skill generation from LLM responses
+- [x] Basic CLI (`run`, `evolve`, `status`, `skills`)
 - [x] LiteLLM multi-model support
 - [x] Ollama integration
+- [x] Graceful offline fallback mode
 
-## v0.2 — Plugins & Dashboard ✅
-- [x] Plugin system with hot-reload
-- [x] Web dashboard (FastAPI)
-- [x] Sandboxed skill execution
-- [x] Export system (JSON, Markdown, skill packs)
-- [x] Self-updater
-- [x] Configuration management
-- [x] Docker support
-- [x] CI/CD pipelines
-- [x] Full documentation
+## v0.2 — Plugins & Dashboard ✅ (Released)
+- [x] Configuration management (YAML/JSON, Pydantic models)
+- [x] Plugin system with hot-reload & hook discovery
+- [x] Web dashboard (FastAPI + REST API)
+- [x] Sandboxed skill execution (subprocess isolation, timeout, memory limits)
+- [x] Export system (JSON, Markdown reports, shareable ZIP skill packs)
+- [x] Self-updater (PyPI version check, skill registry)
+- [x] Docker support (Dockerfile + docker-compose)
+- [x] CI/CD pipelines (test, release, CodeQL)
+- [x] Comprehensive test suite (30+ tests)
+- [x] Sample plugin (task logger)
+- [x] Skill registry with 3 starter skills
+- [x] Full documentation (config, plugins, API, tutorials)
+- [x] GitHub templates (issues, PRs, funding, dependabot)
 
-## v0.3 — Multi-Agent 🔜
-- [ ] Multi-agent orchestration
-- [ ] Task delegation and routing
-- [ ] Collaborative memory between agents
-- [ ] Agent communication protocol
-- [ ] Priority-based task queue
+## v0.3 — Multi-Agent 🚧 (In Progress)
+- [ ] Multi-agent orchestration engine
+- [ ] Task delegation and intelligent routing
+- [ ] Collaborative shared memory between agents
+- [ ] Agent communication protocol (pub/sub)
+- [ ] Priority-based task queue with retries
+- [ ] Agent roles (coder, reviewer, tester, planner)
 
-## v0.4 — Voice & IDE
-- [ ] Voice interface (Whisper + TTS)
+## v0.4 — Voice & IDE 📋 (Planned)
+- [ ] Voice interface (Whisper STT + TTS)
 - [ ] VS Code extension
 - [ ] JetBrains plugin
 - [ ] Enhanced context window management
-- [ ] Code-aware memory (AST parsing)
+- [ ] AST-aware code memory
+- [ ] Inline code suggestions
 
-## v1.0 — Production
+## v1.0 — Production 🎯 (Target)
 - [ ] Optional encrypted cloud sync
 - [ ] Mobile companion app
-- [ ] Enterprise features (SSO, audit logs)
+- [ ] Enterprise features (SSO, audit logs, RBAC)
 - [ ] Performance benchmarks suite
 - [ ] Skill marketplace
 - [ ] Comprehensive testing (>90% coverage)
+- [ ] Multi-language skill support
+- [ ] Plugin marketplace
 
-## Long-term Vision
+## Long-term Vision 🔮
 - [ ] GPU-accelerated inference integration
 - [ ] Federated learning across agents
 - [ ] Natural language skill creation
 - [ ] Autonomous project management
 - [ ] Research paper integration
+- [ ] Custom fine-tuned Nexus models

@@ -13,65 +13,140 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(79, 172, 254, 0.5);
+        }
+        html { scroll-behavior: smooth; }
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
-    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div class="text-2xl font-bold gradient-text">NexusAgent</div>
-        <div>
-            <a href="https://github.com/your-username/nexus-agent" class="text-gray-300 hover:text-white mx-4 transition">GitHub</a>
-            <a href="#" class="text-gray-300 hover:text-white mx-4 transition">Documentation</a>
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center sticky top-0 bg-gray-900/90 backdrop-blur z-50">
+        <div class="text-2xl font-bold gradient-text flex items-center gap-2">
+            <i class="fas fa-brain"></i> NexusAgent
+        </div>
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="#features" class="text-gray-300 hover:text-white transition">Features</a>
+            <a href="#how-it-works" class="text-gray-300 hover:text-white transition">How It Works</a>
+            <a href="#quickstart" class="text-gray-300 hover:text-white transition">Quick Start</a>
+            <a href="advanced_tutorial.md" class="text-gray-300 hover:text-white transition">Advanced Docs</a>
+            <a href="https://github.com/your-username/nexus-agent" class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition border border-gray-700">
+                <i class="fab fa-github mr-2"></i> GitHub
+            </a>
         </div>
     </nav>
 
-    <header class="container mx-auto px-6 py-20 text-center">
-        <h1 class="text-5xl md:text-7xl font-extrabold mb-6">
-            The <span class="gradient-text">Self-Evolving</span> Local AI Agent
+    <header class="container mx-auto px-6 py-24 text-center">
+        <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+            The <span class="gradient-text">Self-Evolving</span> <br/> Local AI Agent
         </h1>
         <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-            Zero configuration. Absolute privacy. Nexus runs entirely on your machine, writes its own skills, and evolves with your codebase.
+            Zero configuration. Absolute privacy. Nexus runs entirely on your machine, writes its own skills, and evolves with your codebase using GraphRAG memory.
         </p>
-        <div class="flex justify-center space-x-4">
-            <a href="https://github.com/your-username/nexus-agent" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full font-semibold transition shadow-lg hover:shadow-blue-500/50">
+        <div class="flex justify-center space-x-4 flex-col sm:flex-row gap-4 sm:gap-0">
+            <a href="https://github.com/your-username/nexus-agent" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full font-semibold transition shadow-lg hover:shadow-blue-500/50 flex items-center justify-center">
                 <i class="fab fa-github mr-2"></i> Star on GitHub
             </a>
-            <a href="#quickstart" class="bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white px-8 py-3 rounded-full font-semibold transition">
-                Quick Start
+            <a href="#quickstart" class="bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white px-8 py-3 rounded-full font-semibold transition flex items-center justify-center">
+                <i class="fas fa-rocket mr-2"></i> Quick Start
             </a>
         </div>
     </header>
 
-    <section class="bg-gray-800 py-20" id="features">
+    <section class="bg-gray-800 py-20 border-y border-gray-700" id="features">
         <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-3 gap-12 text-center">
-                <div class="p-6 rounded-2xl bg-gray-900 border border-gray-700 hover:border-blue-500 transition">
-                    <i class="fas fa-lock text-4xl text-blue-400 mb-4"></i>
-                    <h3 class="text-2xl font-bold mb-2">100% Local & Private</h3>
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Why Choose NexusAgent?</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Built for the future of on-device AI. Stop sending your proprietary code to the cloud.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="feature-card p-8 rounded-2xl bg-gray-900 border border-gray-700 transition duration-300">
+                    <div class="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-lock text-3xl text-blue-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">100% Local & Private</h3>
                     <p class="text-gray-400">Powered by Ollama and LiteLLM. No API keys required. Your code never leaves your machine.</p>
                 </div>
-                <div class="p-6 rounded-2xl bg-gray-900 border border-gray-700 hover:border-blue-500 transition">
-                    <i class="fas fa-dna text-4xl text-purple-400 mb-4"></i>
-                    <h3 class="text-2xl font-bold mb-2">Self-Evolving</h3>
-                    <p class="text-gray-400">Nexus learns from your workspace via local GraphRAG and generates its own reusable Skill Trees.</p>
+                <div class="feature-card p-8 rounded-2xl bg-gray-900 border border-gray-700 transition duration-300">
+                    <div class="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-dna text-3xl text-purple-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Self-Evolving Skills</h3>
+                    <p class="text-gray-400">If Nexus lacks a tool, it writes it dynamically in Python, saving it to your Skill Tree for future reuse.</p>
                 </div>
-                <div class="p-6 rounded-2xl bg-gray-900 border border-gray-700 hover:border-blue-500 transition">
-                    <i class="fas fa-bolt text-4xl text-yellow-400 mb-4"></i>
-                    <h3 class="text-2xl font-bold mb-2">Zero-Config</h3>
-                    <p class="text-gray-400">Just run `nexus run` in any directory and watch it automate your terminal workflow instantly.</p>
+                <div class="feature-card p-8 rounded-2xl bg-gray-900 border border-gray-700 transition duration-300">
+                    <div class="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-project-diagram text-3xl text-green-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">GraphRAG Memory</h3>
+                    <p class="text-gray-400">Nexus builds a local NetworkX graph of your codebase, providing perfect semantic context without token bloat.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-6 py-20" id="how-it-works">
+        <div class="flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2">
+                <h2 class="text-4xl font-bold mb-6">The Skill Tree Ecosystem</h2>
+                <p class="text-gray-400 mb-6 text-lg leading-relaxed">
+                    Nexus is born with a minimal set of tools. When you ask it to perform a complex task, like parsing proprietary logs or analyzing specific database schemas, it uses the local LLM to write a custom Python script.
+                </p>
+                <p class="text-gray-400 mb-6 text-lg leading-relaxed">
+                    It then saves this script permanently into your <code>.nexus/skills/</code> directory. The next time you ask a similar question, Nexus instantly retrieves and executes the custom skill. It gets smarter the more you use it.
+                </p>
+                <a href="advanced_tutorial.md" class="text-blue-400 hover:text-blue-300 font-semibold flex items-center transition">
+                    Read the Advanced Tutorial <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            <div class="md:w-1/2 bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-2xl">
+                <pre class="text-sm overflow-x-auto"><code class="text-purple-400">User:</code> <code class="text-gray-300">"Find the top 5 error rates in my Nginx logs."</code>
+
+<code class="text-blue-400">Nexus:</code> <code class="text-gray-300">Analyzing Request...</code>
+<code class="text-gray-500">>> Skill 'parse_nginx' not found. Generating new skill...</code>
+<code class="text-green-400">[NEW SKILL: parse_nginx_logs] Saved to .nexus/skills/</code>
+<code class="text-blue-400">Nexus:</code> <code class="text-gray-300">Here are the top 5 error rates:
+1. 192.168.1.1 - 45 errors
+2. 10.0.0.5 - 32 errors...</code></pre>
             </div>
         </div>
     </section>
 
     <section class="container mx-auto px-6 py-20" id="quickstart">
         <h2 class="text-4xl font-bold text-center mb-10">Get Started in Seconds</h2>
-        <div class="bg-gray-800 p-8 rounded-xl max-w-3xl mx-auto shadow-2xl border border-gray-700">
-            <pre><code class="text-green-400"># Install the package</code><br><code class="text-white">pip install nexus-agent</code><br><br><code class="text-green-400"># Run a local model with Ollama</code><br><code class="text-white">ollama run llama3</code><br><br><code class="text-green-400"># Give Nexus a task</code><br><code class="text-white">nexus run "Find bugs in my src/ folder and fix them"</code></pre>
+        <div class="bg-gray-900 p-8 rounded-xl max-w-3xl mx-auto shadow-2xl border border-gray-700 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+            <pre class="font-mono text-sm sm:text-base"><code class="text-gray-500"># 1. Install the package via pip</code>
+<code class="text-white">pip install nexus-agent</code>
+
+<code class="text-gray-500"># 2. Start your local Ollama instance (we recommend llama3)</code>
+<code class="text-white">ollama run llama3</code>
+
+<code class="text-gray-500"># 3. Initialize the GraphRAG memory in your project</code>
+<code class="text-white">nexus evolve</code>
+
+<code class="text-gray-500"># 4. Give Nexus a task</code>
+<code class="text-white">nexus run "Find bugs in my src/ folder and fix them"</code></pre>
         </div>
     </section>
 
-    <footer class="border-t border-gray-800 mt-20 py-10 text-center text-gray-500">
-        <p>&copy; 2026 Nexus Team. Open source under the MIT License.</p>
+    <footer class="border-t border-gray-800 bg-gray-900 py-12 text-center text-gray-500 mt-10">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <span class="text-xl font-bold text-white flex items-center justify-center md:justify-start gap-2">
+                    <i class="fas fa-brain"></i> NexusAgent
+                </span>
+                <p class="mt-2 text-sm">The Zero-Config Local AI Framework</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="https://github.com/your-username/nexus-agent" class="hover:text-white transition text-xl"><i class="fab fa-github"></i></a>
+                <a href="#" class="hover:text-white transition text-xl"><i class="fab fa-discord"></i></a>
+                <a href="#" class="hover:text-white transition text-xl"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div class="mt-8 text-sm border-t border-gray-800 pt-8">
+            <p>&copy; 2026 Nexus Team. Open source under the MIT License.</p>
+        </div>
     </footer>
 </body>
 </html>

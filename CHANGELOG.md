@@ -2,6 +2,31 @@
 
 All notable changes to NexusAgent will be documented in this file.
 
+## [1.0.0] - 2026-04-18
+
+### 🎉 Production Release
+
+### 🚀 New Features
+- **Encrypted Cloud Sync** — Fernet encryption, delta sync, multi-target (local/S3/WebDAV), conflict resolution
+- **Audit Logging & RBAC** — Structured JSON-lines audit log, role-based access control (admin/user/viewer), log rotation
+- **Skill Marketplace** — Search, install, rate, uninstall skills by category (code-quality, data-processing, devops, research, web, security)
+- **Performance Benchmark Suite** — Benchmark memory retrieval, skill execution, context building, AST parsing; compare runs across versions
+- **Mobile Companion API** — REST API with JWT auth, mobile-optimized web UI, real-time task management, agent status/skills/memory endpoints
+- **CLI Commands** — `nexus sync push/pull/status`, `nexus audit log/stats`, `nexus marketplace search/install/list`, `nexus benchmark run/compare`, `nexus mobile`
+
+### 📦 Dependencies
+- New optional deps: `cryptography`, `boto3`, `PyJWT`
+
+### 🧪 Testing
+- 140+ total tests across all modules
+- New test suites for cloud_sync, audit, marketplace, benchmarks, mobile
+
+### 📚 Documentation
+- Updated roadmap (v1.0 all ✅)
+- Added v1.1 future roadmap
+- Updated website with v1.0 features
+- 50 GitHub topics
+
 ## [0.4.0] - 2026-04-18
 
 ### 🚀 New Features

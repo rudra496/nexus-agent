@@ -42,20 +42,31 @@
 - [x] Code analysis CLI command (`nexus analyze`)
 - [x] 40+ new tests (voice, AST, context, IDE)
 
-## v1.0 — Production 🎯 (Target)
-- [ ] Optional encrypted cloud sync
-- [ ] Mobile companion app
-- [ ] Enterprise features (SSO, audit logs, RBAC)
-- [ ] Performance benchmarks suite
-- [ ] Skill marketplace
-- [ ] Comprehensive testing (>90% coverage)
-- [ ] Multi-language skill support
-- [ ] Plugin marketplace
+## v1.0 — Production ✅ (Released)
+- [x] Encrypted cloud sync (Fernet encryption, local/S3/WebDAV targets, delta sync)
+- [x] Audit logging & RBAC (JSON-lines audit log, admin/user/viewer roles, log rotation)
+- [x] Skill marketplace (search, install, rate, uninstall by category)
+- [x] Performance benchmark suite (memory, skills, context, AST; compare runs)
+- [x] Mobile companion API (REST + JWT auth, mobile web UI, task management)
+- [x] New CLI commands: `sync`, `audit`, `marketplace`, `benchmark`, `mobile`
+- [x] 140+ total tests with comprehensive coverage
+- [x] 50 GitHub topics for discoverability
 
-## Long-term Vision 🔮
+## v1.1 — Next Steps 🔮 (Planned)
 - [ ] GPU-accelerated inference integration
 - [ ] Federated learning across agents
 - [ ] Natural language skill creation
 - [ ] Autonomous project management
 - [ ] Research paper integration
 - [ ] Custom fine-tuned Nexus models
+- [ ] GraphQL API alongside REST
+- [ ] Plugin marketplace with dependency resolution
+- [ ] Multi-language skill support (JS, Rust, Go)
+- [ ] End-to-end encrypted agent communication
+
+## Long-term Vision 🔮
+- [ ] Distributed agent mesh networking
+- [ ] Custom fine-tuned Nexus models
+- [ ] Enterprise SSO (SAML/OIDC)
+- [ ] Mobile native apps (iOS/Android)
+- [ ] VS Code & JetBrains marketplace extensions

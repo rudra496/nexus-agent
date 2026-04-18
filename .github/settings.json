@@ -3,6 +3,13 @@
     "ai-agent", "local-ai", "ollama", "litellm", "graphrag",
     "self-evolving", "privacy-first", "cli", "terminal", "python",
     "autonomous-agent", "skill-tree", "code-agent", "zero-config",
-    "llm", "networkx", "on-device", "offline-ai", "ai-framework"
+    "llm", "networkx", "on-device", "offline-ai", "ai-framework",
+    "multi-agent", "voice-interface", "speech-to-text", "text-to-speech",
+    "whisper", "ast", "code-analysis", "context-management", "ide-integration",
+    "vscode", "jetbrains", "cloud-sync", "encryption", "fernet",
+    "audit-log", "rbac", "enterprise", "sso", "marketplace",
+    "skill-marketplace", "plugin-marketplace", "benchmarks", "performance",
+    "docker", "fastapi", "pydantic", "pytorch", "cybersecurity",
+    "devops", "open-source", "hacktoberfest", "ml", "nlp", "automation"
   ]
 }

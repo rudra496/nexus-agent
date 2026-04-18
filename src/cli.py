@@ -1,3 +1,6 @@
+import os
+import time
+
 import typer
 from rich.console import Console
 from rich.panel import Panel
@@ -215,6 +218,238 @@ def update_cmd(
         console.print(f"[green]Skills updated: {', '.join(skill_result['updated'])}[/green]")
     else:
         console.print("[dim]No skill updates available.[/dim]")
+
+
+# ── Sync ───────────────────────────────────────────────────────────
+@app.group()
+def sync():
+    """Encrypted cloud sync commands."""
+    pass
+
+
+@sync.command("push")
+def sync_push(
+    target: str = typer.Option(None, "--target", "-t", help="Sync target path"),
+    key: str = typer.Option(None, "--key", "-k", help="Encryption key"),
+):
+    """Push local data to cloud sync target."""
+    from .cloud_sync import CloudSync, SyncConfig
+    cfg = SyncConfig(target_path=target or os.path.join(os.path.expanduser("~"), ".nexus", "sync"), encryption_key=key)
+    engine = CloudSync(cfg)
+    with console.status("Encrypting and syncing...", spinner="earth"):
+        result = engine.push()
+    if result["status"] == "ok":
+        console.print(f"[green]Synced {result['synced']} file(s)[/green]")
+    else:
+        console.print(f"[red]{result.get('message', 'Sync failed')}[/red]")
+
+
+@sync.command("pull")
+def sync_pull(
+    target: str = typer.Option(None, "--target", "-t", help="Sync target path"),
+    key: str = typer.Option(None, "--key", "-k", help="Encryption key"),
+):
+    """Pull data from cloud sync target."""
+    from .cloud_sync import CloudSync, SyncConfig
+    cfg = SyncConfig(target_path=target or os.path.join(os.path.expanduser("~"), ".nexus", "sync"), encryption_key=key)
+    engine = CloudSync(cfg)
+    result = engine.pull()
+    if result["status"] == "ok":
+        console.print(f"[green]Pulled {result['pulled']} file(s)[/green]")
+    else:
+        console.print(f"[red]{result.get('message', 'Pull failed')}[/red]")
+
+
+@sync.command("status")
+def sync_status(
+    target: str = typer.Option(None, "--target", "-t", help="Sync target path"),
+):
+    """Show cloud sync status."""
+    from .cloud_sync import CloudSync, SyncConfig
+    cfg = SyncConfig(target_path=target or os.path.join(os.path.expanduser("~"), ".nexus", "sync"))
+    engine = CloudSync(cfg)
+    status = engine.status()
+    table = Table(title="☁️ Cloud Sync")
+    table.add_column("Key", style="cyan")
+    table.add_column("Value", style="magenta")
+    for k, v in status.items():
+        table.add_row(str(k), str(v))
+    console.print(table)
+
+
+# ── Audit ──────────────────────────────────────────────────────────
+@app.group()
+def audit():
+    """Audit logging & RBAC commands."""
+    pass
+
+
+@audit.command("log")
+def audit_log(
+    limit: int = typer.Option(20, "--limit", "-n", help="Number of entries"),
+    level: str = typer.Option(None, "--level", "-l", help="Filter by level"),
+):
+    """View audit log entries."""
+    from .audit import AuditLogger, LogLevel
+    log_path = os.path.join(os.path.expanduser("~"), ".nexus", "audit.log")
+    logger = AuditLogger(log_path=log_path)
+    level_filter = LogLevel(level) if level else None
+    entries = logger.read_logs(limit=limit, level=level_filter)
+    if not entries:
+        console.print("[yellow]No audit entries found.[/yellow]")
+        return
+    table = Table(title="📋 Audit Log")
+    table.add_column("Time", style="dim")
+    table.add_column("Level", style="cyan")
+    table.add_column("Action", style="green")
+    table.add_column("Actor", style="magenta")
+    for e in entries:
+        t = time.strftime("%H:%M:%S", time.localtime(e.timestamp))
+        table.add_row(t, e.level.value, e.action, e.actor)
+    console.print(table)
+
+
+@audit.command("stats")
+def audit_stats():
+    """Show audit log statistics."""
+    from .audit import AuditLogger
+    log_path = os.path.join(os.path.expanduser("~"), ".nexus", "audit.log")
+    logger = AuditLogger(log_path=log_path)
+    stats = logger.stats()
+    table = Table(title="📊 Audit Stats")
+    table.add_column("Metric", style="cyan")
+    table.add_column("Count", style="magenta")
+    for k, v in stats.items():
+        table.add_row(str(k), str(v))
+    console.print(table)
+
+
+# ── Marketplace ────────────────────────────────────────────────────
+@app.group()
+def marketplace():
+    """Skill & plugin marketplace commands."""
+    pass
+
+
+@marketplace.command("search")
+def marketplace_search(
+    query: str = typer.Argument(..., help="Search query"),
+    category: str = typer.Option(None, "--category", "-c", help="Filter by category"),
+):
+    """Search marketplace for skills and plugins."""
+    from .marketplace import MarketplaceClient, SkillCategory
+    client = MarketplaceClient()
+    client.populate_sample()
+    cat = SkillCategory(category) if category else None
+    results = client.search(query, category=cat)
+    if not results:
+        console.print("[yellow]No results found.[/yellow]")
+        return
+    table = Table(title="🏪 Marketplace Results")
+    table.add_column("Name", style="cyan")
+    table.add_column("Category", style="green")
+    table.add_column("Rating", style="yellow")
+    table.add_column("Downloads", style="magenta")
+    for r in results:
+        table.add_row(r.name, r.category.value, f"{'⭐' * int(r.rating)} {r.rating}", str(r.downloads))
+    console.print(table)
+
+
+@marketplace.command("install")
+def marketplace_install(
+    name: str = typer.Argument(..., help="Skill name to install"),
+):
+    """Install a skill from the marketplace."""
+    from .marketplace import MarketplaceClient
+    client = MarketplaceClient()
+    client.populate_sample()
+    result = client.install(name)
+    if result["status"] == "ok":
+        console.print(f"[green]Installed '{name}' → {result['path']}[/green]")
+    else:
+        console.print(f"[red]{result.get('message', 'Install failed')}[/red]")
+
+
+@marketplace.command("list")
+def marketplace_list(
+    category: str = typer.Option(None, "--category", "-c", help="Filter by category"),
+):
+    """List all available marketplace skills."""
+    from .marketplace import MarketplaceClient, SkillCategory
+    client = MarketplaceClient()
+    client.populate_sample()
+    cat = SkillCategory(category) if category else None
+    items = client.list_all(category=cat)
+    if not items:
+        console.print("[yellow]No skills available.[/yellow]")
+        return
+    table = Table(title="🏪 Available Skills")
+    table.add_column("Name", style="cyan")
+    table.add_column("Version", style="dim")
+    table.add_column("Category", style="green")
+    table.add_column("Rating", style="yellow")
+    table.add_column("Author", style="magenta")
+    for i in items:
+        table.add_row(i.name, i.version, i.category.value, f"{'⭐' * max(1, int(i.rating))}", i.author)
+    console.print(table)
+
+
+# ── Benchmark ──────────────────────────────────────────────────────
+@app.group()
+def benchmark():
+    """Performance benchmark commands."""
+    pass
+
+
+@benchmark.command("run")
+def benchmark_run(
+    output: str = typer.Option(None, "--output", "-o", help="Output file path"),
+):
+    """Run all performance benchmarks."""
+    from .benchmarks import BenchmarkRunner
+    console.print("[bold cyan]Running benchmarks...[/bold cyan]")
+    runner = BenchmarkRunner()
+    with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), console=console) as progress:
+        task = progress.add_task("Benchmarking...")
+        suite = runner.run_all()
+        progress.update(task, completed=True)
+    path = runner.save_results(suite, output)
+    console.print(Markdown(suite.to_markdown()))
+    console.print(f"[green]Results saved to {path}[/green]")
+
+
+@benchmark.command("compare")
+def benchmark_compare(
+    file1: str = typer.Argument(..., help="First benchmark file"),
+    file2: str = typer.Argument(..., help="Second benchmark file"),
+):
+    """Compare two benchmark result files."""
+    from .benchmarks import BenchmarkRunner
+    runner = BenchmarkRunner()
+    try:
+        md = runner.compare(file1, file2)
+        console.print(Markdown(md))
+    except FileNotFoundError as e:
+        console.print(f"[red]File not found: {e}[/red]")
+        raise typer.Exit(1)
+
+
+# ── Mobile ─────────────────────────────────────────────────────────
+@app.command("mobile")
+def mobile_cmd(
+    host: str = typer.Option("0.0.0.0", help="Host to bind"),
+    port: int = typer.Option(8430, help="Port to bind"),
+):
+    """Start the mobile companion API server."""
+    from .mobile import MobileAPI, MobileConfig
+    cfg = MobileConfig(host=host, port=port)
+    api = MobileAPI(cfg)
+    console.print(f"[bold cyan]Starting Mobile API on http://{host}:{port}[/bold cyan]")
+    try:
+        api.serve()
+    except ImportError:
+        console.print("[red]Install dependencies: pip install fastapi uvicorn PyJWT[/red]")
+        raise typer.Exit(1)
 
 
 if __name__ == "__main__":

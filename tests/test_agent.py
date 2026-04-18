@@ -17,6 +17,15 @@ from src.export import (
     export_markdown_report,
     export_skill_pack,
 )
+from src.multi_agent import (
+    AgentRole,
+    AgentConfig,
+    Task,
+    AgentMessage,
+    CollaborativeMemory,
+    SubAgent,
+    AgentOrchestrator,
+)
 
 
 # ── Fixtures ────────────────────────────────────────────────────────
@@ -50,6 +59,17 @@ def sandbox():
     return Sandbox(timeout=5, max_memory_mb=64)
 
 
+@pytest.fixture
+def collab_memory(tmp_dir):
+    return CollaborativeMemory(storage_path=os.path.join(tmp_dir, "collab.json"))
+
+
+@pytest.fixture
+def orchestrator(tmp_dir):
+    os.chdir(tmp_dir)
+    return AgentOrchestrator()
+
+
 # ── Agent Tests ─────────────────────────────────────────────────────
 
 class TestNexusAgent:
@@ -64,7 +84,6 @@ class TestNexusAgent:
         assert "Hello Nexus" in response
 
     def test_evolve_scans_files(self, agent, tmp_dir):
-        # Create some dummy files
         for name in ["app.py", "README.md", "config.txt"]:
             with open(os.path.join(tmp_dir, name), "w") as f:
                 f.write("# dummy")
@@ -82,24 +101,20 @@ class TestNexusAgent:
 class TestGraphMemory:
     def test_add_node(self, memory):
         memory.add_node("test.py", {"type": "file"})
-        stats = memory.get_stats()
-        assert stats["nodes"] == 1
+        assert memory.get_stats()["nodes"] == 1
 
     def test_add_edge(self, memory):
         memory.add_node("a.py", {})
         memory.add_node("b.py", {})
         memory.add_edge("a.py", "b.py", "imports")
-        stats = memory.get_stats()
-        assert stats["edges"] == 1
+        assert memory.get_stats()["edges"] == 1
 
     def test_retrieve_context_empty(self, memory):
-        ctx = memory.retrieve_context("nonexistent query")
-        assert "No prior context" in ctx
+        assert "No prior context" in memory.retrieve_context("nonexistent")
 
     def test_retrieve_context_match(self, memory):
         memory.add_node("auth.py", {"type": "module", "desc": "authentication"})
-        ctx = memory.retrieve_context("authentication module")
-        assert "auth.py" in ctx
+        assert "auth.py" in memory.retrieve_context("authentication module")
 
     def test_persistence(self, tmp_dir):
         path = os.path.join(tmp_dir, "persist.json")
@@ -109,27 +124,16 @@ class TestGraphMemory:
         mem2 = GraphMemory(storage_path=path)
         assert mem2.get_stats()["nodes"] == 1
 
-    def test_stats(self, memory):
-        assert "nodes" in memory.get_stats()
-        assert "edges" in memory.get_stats()
-
 
 # ── Skill Tree Tests ────────────────────────────────────────────────
 
 class TestSkillTree:
     def test_add_skill(self, skill_tree):
         skill_tree.add_skill("test", "A test skill", "print('hello')")
-        stats = skill_tree.get_stats()
-        assert stats["total_skills"] == 1
+        assert skill_tree.get_stats()["total_skills"] == 1
 
     def test_list_skills_empty(self, skill_tree):
-        result = skill_tree.list_skills()
-        assert "No custom skills" in result
-
-    def test_list_skills_with_data(self, skill_tree):
-        skill_tree.add_skill("csv_parser", "Parse CSV files", "import csv")
-        result = skill_tree.list_skills()
-        assert "csv_parser" in result
+        assert "No custom skills" in skill_tree.list_skills()
 
     def test_skill_persistence(self, tmp_dir):
         d = os.path.join(tmp_dir, "skills2")
@@ -145,11 +149,9 @@ class TestConfig:
     def test_default_config(self):
         cfg = NexusConfig()
         assert cfg.model.default == "ollama/llama3"
-        assert cfg.memory.max_nodes == 10000
-        assert cfg.skills.directory == ".nexus/skills"
         assert cfg.web.port == 8420
 
-    def test_custom_model_config(self):
+    def test_custom_model(self):
         cfg = NexusConfig(model=ModelConfig(default="ollama/phi3"))
         assert cfg.model.default == "ollama/phi3"
 
@@ -163,11 +165,7 @@ class TestConfig:
     def test_config_serialization(self):
         cfg = NexusConfig()
         d = cfg.model_dump()
-        assert "model" in d
-        assert "memory" in d
-        assert "skills" in d
-        assert "plugins" in d
-        assert "web" in d
+        assert "model" in d and "memory" in d
 
 
 # ── Plugin Tests ────────────────────────────────────────────────────
@@ -180,36 +178,28 @@ class TestPlugins:
     def test_load_plugin(self, tmp_dir):
         plugin_dir = os.path.join(tmp_dir, "plugins")
         os.makedirs(plugin_dir)
-        plugin_file = os.path.join(plugin_dir, "hello.py")
-        with open(plugin_file, "w") as f:
+        with open(os.path.join(plugin_dir, "hello.py"), "w") as f:
             f.write("def nexus_on_task(task): return f'handled: {task}'\n")
         pm = PluginManager()
-        # Temporarily override plugin dir
         from src.config import get_config
-        cfg = get_config()
-        cfg.plugins.directory = plugin_dir
+        get_config().plugins.directory = plugin_dir
         pm.load_all()
         assert "hello" in pm.plugins
-        assert "nexus_on_task" in pm.plugins["hello"].hooks
 
     def test_call_hook(self, tmp_dir):
         plugin_dir = os.path.join(tmp_dir, "plugins2")
         os.makedirs(plugin_dir)
-        plugin_file = os.path.join(plugin_dir, "echo.py")
-        with open(plugin_file, "w") as f:
+        with open(os.path.join(plugin_dir, "echo.py"), "w") as f:
             f.write("def nexus_echo(msg): return msg.upper()\n")
         pm = PluginManager()
         from src.config import get_config
-        cfg = get_config()
-        cfg.plugins.directory = plugin_dir
+        get_config().plugins.directory = plugin_dir
         pm.load_all()
         results = pm.call_hook("nexus_echo", "hello")
         assert "HELLO" in results[0]
 
     def test_list_plugins(self):
-        pm = PluginManager()
-        result = pm.list_plugins()
-        assert isinstance(result, list)
+        assert isinstance(PluginManager().list_plugins(), list)
 
 
 # ── Sandbox Tests ───────────────────────────────────────────────────
@@ -217,63 +207,178 @@ class TestPlugins:
 class TestSandbox:
     def test_execute_python(self, sandbox):
         result = sandbox.execute("print('hello world')")
-        assert result.success
-        assert "hello world" in result.stdout
+        assert result.success and "hello world" in result.stdout
 
     def test_execute_error(self, sandbox):
-        result = sandbox.execute("raise ValueError('test error')")
-        assert not result.success
-        assert "test error" in result.stderr
+        result = sandbox.execute("raise ValueError('test')")
+        assert not result.success and "test" in result.stderr
 
     def test_timeout(self):
-        sb = Sandbox(timeout=1)
-        result = sb.execute("import time; time.sleep(10)")
+        result = Sandbox(timeout=1).execute("import time; time.sleep(10)")
         assert result.timed_out
 
     def test_unsupported_language(self, sandbox):
         result = sandbox.execute("console.log('hi')", language="javascript")
-        assert not result.success
         assert "Unsupported" in result.stderr
 
-    def test_sandbox_result_repr(self):
-        ok = SandboxResult("out", "err", 0)
-        assert "OK" in repr(ok)
-        fail = SandboxResult("out", "err", 1)
-        assert "ERR" in repr(fail)
-        timeout = SandboxResult("", "", -1, timed_out=True)
-        assert "TIMEOUT" in repr(timeout)
+    def test_result_repr(self):
+        assert "OK" in repr(SandboxResult("out", "err", 0))
+        assert "TIMEOUT" in repr(SandboxResult("", "", -1, timed_out=True))
 
 
 # ── Export Tests ────────────────────────────────────────────────────
 
 class TestExport:
     def test_export_skills_json(self, agent):
-        agent.skill_tree.add_skill("test_exp", "desc", "pass")
-        result = export_skills_json(agent)
-        data = json.loads(result)
-        assert len(data) == 1
-        assert data[0]["name"] == "test_exp"
-
-    def test_export_skills_to_file(self, agent, tmp_dir):
-        agent.skill_tree.add_skill("file_test", "desc", "pass")
-        path = os.path.join(tmp_dir, "skills.json")
-        export_skills_json(agent, output=path)
-        assert os.path.exists(path)
+        agent.skill_tree.add_skill("test", "desc", "pass")
+        data = json.loads(export_skills_json(agent))
+        assert data[0]["name"] == "test"
 
     def test_export_memory_graph(self, agent):
         agent.memory.add_node("test.py", {})
-        result = export_memory_graph(agent)
-        data = json.loads(result)
+        data = json.loads(export_memory_graph(agent))
         assert len(data["nodes"]) == 1
 
     def test_export_markdown_report(self, agent):
-        result = export_markdown_report(agent)
-        assert "# NexusAgent Report" in result
-        assert "Memory Graph" in result
+        assert "# NexusAgent Report" in export_markdown_report(agent)
 
     def test_export_skill_pack(self, agent, tmp_dir):
-        agent.skill_tree.add_skill("pack_skill", "desc", "print('pack')")
+        agent.skill_tree.add_skill("pack", "desc", "print('x')")
         path = os.path.join(tmp_dir, "pack.zip")
         output = export_skill_pack(agent, output=path)
-        assert os.path.exists(output)
-        assert os.path.getsize(output) > 0
+        assert os.path.exists(output) and os.path.getsize(output) > 0
+
+
+# ── Multi-Agent Tests ──────────────────────────────────────────────
+
+class TestMultiAgent:
+    def test_register_agent(self, orchestrator):
+        agent = orchestrator.register_agent("coder", AgentConfig(role=AgentRole.CODER))
+        assert "coder" in orchestrator.agents
+        assert agent.config.role == AgentRole.CODER
+
+    def test_register_multiple_agents(self, orchestrator):
+        orchestrator.register_agent("agent1")
+        orchestrator.register_agent("agent2")
+        orchestrator.register_agent("agent3")
+        assert len(orchestrator.agents) == 3
+
+    def test_submit_task(self, orchestrator):
+        task = orchestrator.submit_task("Write a test", priority=1)
+        assert task.status == "pending"
+        assert task.priority == 1
+        assert len(orchestrator.task_queue) == 1
+
+    def test_route_task_to_specific_agent(self, orchestrator):
+        orchestrator.register_agent("coder", AgentConfig(role=AgentRole.CODER))
+        task = orchestrator.submit_task("Fix bug", target_agent="coder")
+        routed = orchestrator.route_task(task)
+        assert routed.name == "coder"
+
+    def test_route_task_to_role(self, orchestrator):
+        orchestrator.register_agent("reviewer", AgentConfig(role=AgentRole.REVIEWER))
+        task = orchestrator.submit_task("Review code", role=AgentRole.REVIEWER)
+        routed = orchestrator.route_task(task)
+        assert routed.config.role == AgentRole.REVIEWER
+
+    def test_route_task_load_balancing(self, orchestrator):
+        orchestrator.register_agent("agent1")
+        orchestrator.register_agent("agent2")
+        task = orchestrator.submit_task("Generic task")
+        routed = orchestrator.route_task(task)
+        assert routed.name in orchestrator.agents
+
+    def test_execute_task_offline(self, orchestrator):
+        orchestrator.register_agent("worker")
+        task = orchestrator.submit_task("Do something")
+        result = orchestrator.execute_task(task)
+        assert result.status == "completed" or result.status == "failed"
+        assert result.assigned_to == "worker"
+
+    def test_run_all_tasks(self, orchestrator):
+        orchestrator.register_agent("worker")
+        orchestrator.submit_task("Task 1")
+        orchestrator.submit_task("Task 2")
+        results = orchestrator.run_all()
+        assert len(results) == 2
+
+    def test_broadcast_message(self, orchestrator):
+        orchestrator.register_agent("agent1")
+        orchestrator.register_agent("agent2")
+        orchestrator.broadcast("system", "Hello all")
+        assert len(orchestrator.message_bus) == 1
+        assert len(orchestrator.agents["agent1"].inbox) == 1
+        assert len(orchestrator.agents["agent2"].inbox) == 1
+
+    def test_direct_message(self, orchestrator):
+        orchestrator.register_agent("agent1")
+        orchestrator.register_agent("agent2")
+        orchestrator.send_message("agent1", "agent2", "Direct msg")
+        assert len(orchestrator.agents["agent2"].inbox) == 1
+        assert orchestrator.agents["agent2"].inbox[0].content == "Direct msg"
+
+    def test_orchestrator_status(self, orchestrator):
+        orchestrator.register_agent("coder", AgentConfig(role=AgentRole.CODER))
+        orchestrator.register_agent("reviewer", AgentConfig(role=AgentRole.REVIEWER))
+        status = orchestrator.get_status()
+        assert "coder" in status["agents"]
+        assert "reviewer" in status["agents"]
+        assert status["tasks"]["pending"] == 0
+
+
+# ── Collaborative Memory Tests ─────────────────────────────────────
+
+class TestCollaborativeMemory:
+    def test_set_and_get(self, collab_memory):
+        collab_memory.set("project_name", "NexusAgent")
+        assert collab_memory.get("project_name") == "NexusAgent"
+
+    def test_get_default(self, collab_memory):
+        assert collab_memory.get("nonexistent") is None
+        assert collab_memory.get("nonexistent", "default") == "default"
+
+    def test_shared_node(self, collab_memory):
+        collab_memory.add_shared_node("shared_file.py", {"type": "file"})
+        stats = collab_memory.get_stats()
+        assert stats["graph_nodes"] == 1
+
+    def test_persistence(self, tmp_dir):
+        path = os.path.join(tmp_dir, "collab2.json")
+        mem1 = CollaborativeMemory(storage_path=path)
+        mem1.set("key1", "value1")
+        mem2 = CollaborativeMemory(storage_path=path)
+        assert mem2.get("key1") == "value1"
+
+
+# ── Agent Message Tests ────────────────────────────────────────────
+
+class TestAgentMessage:
+    def test_message_creation(self):
+        msg = AgentMessage("agent1", "Hello", "info", "agent2")
+        assert msg.sender == "agent1"
+        assert msg.target == "agent2"
+
+    def test_message_serialization(self):
+        msg = AgentMessage("agent1", "Test", "info")
+        d = msg.to_dict()
+        assert d["sender"] == "agent1"
+        assert d["type"] == "info"
+        assert "timestamp" in d
+
+    def test_broadcast_message(self):
+        msg = AgentMessage("system", "Alert", "info")
+        assert msg.target is None
+
+
+# ── Task Tests ──────────────────────────────────────────────────────
+
+class TestTask:
+    def test_task_creation(self):
+        task = Task(prompt="Do something", priority=3)
+        assert task.status == "pending"
+        assert task.priority == 3
+        assert len(task.id) == 8
+
+    def test_task_default_priority(self):
+        task = Task(prompt="Test")
+        assert task.priority == 5

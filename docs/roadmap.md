@@ -23,13 +23,14 @@
 - [x] Full documentation (config, plugins, API, tutorials)
 - [x] GitHub templates (issues, PRs, funding, dependabot)
 
-## v0.3 — Multi-Agent 🚧 (In Progress)
-- [ ] Multi-agent orchestration engine
-- [ ] Task delegation and intelligent routing
-- [ ] Collaborative shared memory between agents
-- [ ] Agent communication protocol (pub/sub)
-- [ ] Priority-based task queue with retries
-- [ ] Agent roles (coder, reviewer, tester, planner)
+## v0.3 — Multi-Agent ✅ (Released)
+- [x] Multi-agent orchestration engine (AgentOrchestrator)
+- [x] Task delegation and intelligent routing (role-based, priority-based, load-balanced)
+- [x] Collaborative shared memory (CollaborativeMemory with shared graph + state)
+- [x] Agent communication protocol (broadcast + direct messaging via message bus)
+- [x] Agent roles (coder, reviewer, tester, planner, researcher, general)
+- [x] Priority-based task queue with retries
+- [x] 20+ multi-agent tests
 
 ## v0.4 — Voice & IDE 📋 (Planned)
 - [ ] Voice interface (Whisper STT + TTS)

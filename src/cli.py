@@ -219,3 +219,42 @@ def update_cmd(
 
 if __name__ == "__main__":
     app()
+
+
+# ── Multi-Agent ────────────────────────────────────────────────────
+@app.group()
+def agents():
+    """Multi-agent orchestration commands."""
+    pass
+
+
+@agents.command("register")
+def agents_register(
+    name: str = typer.Argument(..., help="Agent name"),
+    role: str = typer.Option("general", "--role", "-r", help="Agent role: coder, reviewer, tester, planner, researcher, general"),
+    model: str = typer.Option(None, "--model", "-m", help="Model override"),
+):
+    """Register a new agent."""
+    from .multi_agent import AgentOrchestrator, AgentConfig, AgentRole
+    orch = AgentOrchestrator()
+    role_enum = AgentRole(role)
+    config = AgentConfig(role=role_enum, model=model or get_config().model.default)
+    agent = orch.register_agent(name, config)
+    console.print(f"[green]Agent '{name}' registered with role '{role_enum.value}'[/green]")
+
+
+@agents.command("status")
+def agents_status():
+    """Show multi-agent system status."""
+    from .multi_agent import AgentOrchestrator
+    orch = AgentOrchestrator()
+    # Load any existing agents from config if needed
+    status = orch.get_status()
+    table = Table(title="🤖 Multi-Agent System")
+    table.add_column("Agent", style="cyan")
+    table.add_column("Role", style="green")
+    table.add_column("Tasks Done", style="magenta")
+    for name, info in status["agents"].items():
+        table.add_row(name, info["role"], str(info["tasks_completed"]))
+    table.add_row("Tasks", f"{status['tasks']['total']} total", f"{status['tasks']['completed']} done")
+    console.print(table)

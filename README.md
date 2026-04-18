@@ -267,13 +267,15 @@ See [docs/roadmap.md](docs/roadmap.md) for the full roadmap.
 - [x] Export system (JSON, Markdown, ZIP skill packs)
 - [x] Self-updater + skill registry
 - [x] Docker support
-- [x] CI/CD + 30+ tests
+- [x] CI/CD + 40+ tests
 
-### 🚧 v0.3 — Multi-Agent (In Progress)
-- [ ] Multi-agent orchestration engine
-- [ ] Task delegation and routing
-- [ ] Collaborative shared memory
-- [ ] Agent communication protocol
+### ✅ v0.3 — Multi-Agent
+- [x] Multi-agent orchestration engine
+- [x] Task delegation and intelligent routing
+- [x] Collaborative shared memory
+- [x] Agent communication protocol (broadcast + direct messaging)
+- [x] Agent roles (coder, reviewer, tester, planner, researcher)
+- [x] Priority-based task queue with load balancing
 
 ### 📋 v0.4 — Voice & IDE
 - [ ] Voice interface (Whisper + TTS)

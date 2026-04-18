@@ -2,6 +2,20 @@
 
 All notable changes to NexusAgent will be documented in this file.
 
+## [0.3.0] - 2026-04-18
+
+### 🚀 New Features
+- **Multi-Agent Orchestration** — AgentOrchestrator for managing multiple specialized agents
+- **Task Delegation & Routing** — Role-based, priority-based, and load-balanced task routing
+- **Collaborative Memory** — Shared graph and state accessible by all agents
+- **Agent Communication** — Broadcast and direct messaging via message bus
+- **Agent Roles** — Coder, reviewer, tester, planner, researcher, general
+- **Priority Task Queue** — Sortable queue with configurable priorities
+- **CLI Commands** — `nexus agents register`, `nexus agents status`
+
+### 🧪 Testing
+- 50+ comprehensive tests across all modules including multi-agent
+
 ## [0.2.0] - 2026-04-18
 
 ### 🚀 New Features

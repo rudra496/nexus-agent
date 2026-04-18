@@ -8,7 +8,7 @@ import pytest
 from src.agent import NexusAgent
 from src.memory import GraphMemory
 from src.skills import SkillTree
-from src.config import NexusConfig, load_config, save_config, get_config, ModelConfig
+from src.config import NexusConfig, load_config, save_config, get_config, ModelConfig, PluginConfig
 from src.plugins import PluginManager
 from src.sandbox import Sandbox, SandboxResult
 from src.export import (
@@ -181,8 +181,7 @@ class TestPlugins:
         with open(os.path.join(plugin_dir, "hello.py"), "w") as f:
             f.write("def nexus_on_task(task): return f'handled: {task}'\n")
         pm = PluginManager()
-        from src.config import get_config
-        get_config().plugins.directory = plugin_dir
+        pm._config = NexusConfig(plugins=PluginConfig(directory=plugin_dir))
         pm.load_all()
         assert "hello" in pm.plugins
 
@@ -192,8 +191,7 @@ class TestPlugins:
         with open(os.path.join(plugin_dir, "echo.py"), "w") as f:
             f.write("def nexus_echo(msg): return msg.upper()\n")
         pm = PluginManager()
-        from src.config import get_config
-        get_config().plugins.directory = plugin_dir
+        pm._config = NexusConfig(plugins=PluginConfig(directory=plugin_dir))
         pm.load_all()
         results = pm.call_hook("nexus_echo", "hello")
         assert "HELLO" in results[0]

@@ -277,10 +277,14 @@ See [docs/roadmap.md](docs/roadmap.md) for the full roadmap.
 - [x] Agent roles (coder, reviewer, tester, planner, researcher)
 - [x] Priority-based task queue with load balancing
 
-### 📋 v0.4 — Voice & IDE
-- [ ] Voice interface (Whisper + TTS)
-- [ ] VS Code & JetBrains extensions
-- [ ] AST-aware code memory
+### ✅ v0.4 — Voice & IDE
+- [x] Voice interface (Whisper STT + pyttsx3/edge-tts TTS)
+- [x] IDE integration base (JSON-RPC, VS Code manifest, JetBrains ready)
+- [x] AST-aware code memory (functions, classes, imports, dependencies)
+- [x] Context window management (token budgeting, priority selection)
+- [x] Inline code suggestions (completion, diagnostics API)
+- [x] `nexus voice` and `nexus analyze` CLI commands
+- [x] 90+ total tests
 
 ### 🎯 v1.0 — Production
 - [ ] Encrypted cloud sync

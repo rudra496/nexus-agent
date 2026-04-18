@@ -32,13 +32,15 @@
 - [x] Priority-based task queue with retries
 - [x] 20+ multi-agent tests
 
-## v0.4 — Voice & IDE 📋 (Planned)
-- [ ] Voice interface (Whisper STT + TTS)
-- [ ] VS Code extension
-- [ ] JetBrains plugin
-- [ ] Enhanced context window management
-- [ ] AST-aware code memory
-- [ ] Inline code suggestions
+## v0.4 — Voice & IDE ✅ (Released)
+- [x] Voice interface (Whisper STT + TTS with pyttsx3/edge-tts)
+- [x] IDE integration base (JSON-RPC server, VS Code manifest generator)
+- [x] AST-aware code memory (parse functions, classes, imports, dependencies)
+- [x] Enhanced context window management (token budgeting, priority selection)
+- [x] Inline code suggestions (IDEClient completion/diagnostic API)
+- [x] Voice CLI command (`nexus voice`)
+- [x] Code analysis CLI command (`nexus analyze`)
+- [x] 40+ new tests (voice, AST, context, IDE)
 
 ## v1.0 — Production 🎯 (Target)
 - [ ] Optional encrypted cloud sync

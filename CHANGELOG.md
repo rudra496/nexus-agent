@@ -2,6 +2,19 @@
 
 All notable changes to NexusAgent will be documented in this file.
 
+## [0.4.0] - 2026-04-18
+
+### 🚀 New Features
+- **Voice Interface** — STT (Whisper local/API) + TTS (pyttsx3, edge-tts), voice conversation loop
+- **AST-Aware Code Memory** — Parse functions, classes, imports, dependencies, symbol search
+- **Context Window Manager** — Token budgeting, priority-based context selection, conversation truncation
+- **IDE Integration** — JSON-RPC server, IDEClient for completions/diagnostics/code actions
+- **VS Code Extension Template** — Manifest generator for VS Code extension
+- **CLI Commands** — `nexus voice`, `nexus analyze`
+
+### 🧪 Testing
+- 90+ total tests across all modules
+
 ## [0.3.0] - 2026-04-18
 
 ### 🚀 New Features

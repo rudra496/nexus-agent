@@ -258,3 +258,74 @@ def agents_status():
         table.add_row(name, info["role"], str(info["tasks_completed"]))
     table.add_row("Tasks", f"{status['tasks']['total']} total", f"{status['tasks']['completed']} done")
     console.print(table)
+
+
+# ── Voice ──────────────────────────────────────────────────────────
+@app.command("voice")
+def voice_cmd(
+    duration: int = typer.Option(5, "--duration", "-d", help="Recording duration in seconds"),
+    engine: str = typer.Option("mock", "--engine", "-e", help="TTS engine: mock, pyttsx3, edge_tts"),
+):
+    """Voice interface: listen and respond via speech."""
+    from .voice import VoiceInterface, VoiceConfig, TTSEngine
+    tts_map = {"mock": TTSEngine.MOCK, "pyttsx3": TTSEngine.PYTTSX3, "edge_tts": TTSEngine.EDGE_TTS}
+    config = VoiceConfig(tts_engine=tts_map.get(engine, TTSEngine.MOCK))
+    vi = VoiceInterface(config)
+    console.print(f"[bold cyan]🎤 Listening for {duration}s...[/bold cyan]")
+    result = vi.listen(duration)
+    console.print(f"[green]Heard:[/green] {result.text}")
+    agent = NexusAgent()
+    response = agent.execute(result.text)
+    console.print(f"[bold green]Nexus:[/bold green] {response}")
+    vi.speak(response)
+
+
+# ── AST / Code Analysis ────────────────────────────────────────────
+@app.command("analyze")
+def analyze_cmd(
+    path: str = typer.Argument(".", help="File or directory to analyze"),
+    symbol: str = typer.Option(None, "--symbol", "-s", help="Search for a symbol"),
+):
+    """AST-aware code analysis."""
+    from .ast_memory import ASTParser
+    import glob
+
+    parser = ASTParser()
+    targets = []
+    if os.path.isfile(path):
+        targets = [path]
+    else:
+        targets = glob.glob(os.path.join(path, "**/*.py"), recursive=True)
+
+    if not targets:
+        console.print("[yellow]No Python files found.[/yellow]")
+        raise typer.Exit()
+
+    console.print(f"[bold cyan]Analyzing {len(targets)} file(s)...[/bold cyan]")
+
+    if symbol:
+        results = parser.search_symbols(targets, symbol)
+        if not results:
+            console.print("[yellow]No matches found.[/yellow]")
+        for r in results:
+            console.print(f"  [{r['type']}] {r['name']} at {r['file']}:{r['line']}")
+        return
+
+    table = Table(title="📊 Code Analysis")
+    table.add_column("File", style="cyan")
+    table.add_column("Functions", style="green")
+    table.add_column("Classes", style="purple")
+    table.add_column("Imports", style="yellow")
+    table.add_column("Lines", style="dim")
+
+    for fp in sorted(targets):
+        analysis = parser.parse_file(fp)
+        if analysis:
+            table.add_row(
+                os.path.basename(fp),
+                str(len(analysis.functions)),
+                str(len(analysis.classes)),
+                str(len(analysis.imports)),
+                str(analysis.line_count),
+            )
+    console.print(table)

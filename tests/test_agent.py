@@ -380,3 +380,235 @@ class TestTask:
     def test_task_default_priority(self):
         task = Task(prompt="Test")
         assert task.priority == 5
+
+
+# ── Voice Tests ─────────────────────────────────────────────────────
+
+class TestVoice:
+    def test_voice_config_defaults(self):
+        from src.voice import VoiceConfig, STTEngine, TTSEngine
+        cfg = VoiceConfig()
+        assert cfg.stt_engine == STTEngine.MOCK
+        assert cfg.tts_engine == TTSEngine.MOCK
+        assert cfg.language == "en"
+
+    def test_mock_stt(self):
+        from src.voice import SpeechToText, VoiceConfig, STTEngine
+        stt = SpeechToText(VoiceConfig(stt_engine=STTEngine.MOCK))
+        result = stt.transcribe_file("nonexistent.wav")
+        assert "mock" in result.text
+
+    def test_mock_tts(self):
+        from src.voice import TextToSpeech, VoiceConfig, TTSEngine
+        tts = TextToSpeech(VoiceConfig(tts_engine=TTSEngine.MOCK))
+        assert tts.speak("hello") is None
+
+    def test_transcription_result(self):
+        from src.voice import TranscriptionResult
+        r = TranscriptionResult(text="hello world", language="en", confidence=0.95)
+        assert r.text == "hello world"
+        assert "hello" in repr(r)
+
+    def test_voice_interface(self):
+        from src.voice import VoiceInterface, VoiceConfig, STTEngine, TTSEngine
+        vi = VoiceInterface(VoiceConfig(stt_engine=STTEngine.MOCK, tts_engine=TTSEngine.MOCK))
+        assert vi.config.language == "en"
+
+
+# ── AST Memory Tests ───────────────────────────────────────────────
+
+class TestASTMemory:
+    def test_parse_file(self, tmp_dir):
+        from src.ast_memory import ASTParser
+        f = os.path.join(tmp_dir, "test.py")
+        with open(f, "w") as fh:
+            fh.write("def hello(name):\n    return f'Hello {name}'\n\nclass Foo:\n    def bar(self):\n        pass\n")
+        parser = ASTParser()
+        analysis = parser.parse_file(f)
+        assert analysis is not None
+        assert len(analysis.functions) == 1
+        assert analysis.functions[0].name == "hello"
+        assert len(analysis.classes) == 1
+        assert analysis.classes[0].name == "Foo"
+
+    def test_parse_imports(self, tmp_dir):
+        from src.ast_memory import ASTParser
+        f = os.path.join(tmp_dir, "test2.py")
+        with open(f, "w") as fh:
+            fh.write("import os\nfrom pathlib import Path\nimport json\n")
+        parser = ASTParser()
+        analysis = parser.parse_file(f)
+        assert len(analysis.imports) == 3
+        assert analysis.imports[0].is_from is False
+        assert analysis.imports[1].is_from is True
+
+    def test_parse_async_function(self, tmp_dir):
+        from src.ast_memory import ASTParser
+        f = os.path.join(tmp_dir, "test3.py")
+        with open(f, "w") as fh:
+            fh.write("async def fetch():\n    pass\n")
+        parser = ASTParser()
+        analysis = parser.parse_file(f)
+        assert analysis.functions[0].is_async is True
+
+    def test_get_function_signature(self, tmp_dir):
+        from src.ast_memory import ASTParser
+        f = os.path.join(tmp_dir, "test4.py")
+        with open(f, "w") as fh:
+            fh.write("def add(a, b) -> int:\n    return a + b\n")
+        parser = ASTParser()
+        sig = parser.get_function_signature(f, "add")
+        assert "add(a, b)" in sig
+        assert "-> int" in sig
+
+    def test_dependency_graph(self, tmp_dir):
+        from src.ast_memory import ASTParser
+        f1 = os.path.join(tmp_dir, "mod_a.py")
+        f2 = os.path.join(tmp_dir, "mod_b.py")
+        with open(f1, "w") as fh:
+            fh.write("")
+        with open(f2, "w") as fh:
+            fh.write("import mod_a\n")
+        parser = ASTParser()
+        deps = parser.get_dependency_graph([f1, f2])
+        assert f2 in deps
+        assert f1 in deps[f2]
+
+    def test_search_symbols(self, tmp_dir):
+        from src.ast_memory import ASTParser
+        f = os.path.join(tmp_dir, "test5.py")
+        with open(f, "w") as fh:
+            fh.write("def my_function():\n    pass\nclass MyClass:\n    pass\n")
+        parser = ASTParser()
+        results = parser.search_symbols([f], "my")
+        assert len(results) == 2
+
+    def test_parse_invalid_syntax(self, tmp_dir):
+        from src.ast_memory import ASTParser
+        f = os.path.join(tmp_dir, "bad.py")
+        with open(f, "w") as fh:
+            fh.write("def broken(\n")
+        parser = ASTParser()
+        assert parser.parse_file(f) is None
+
+    def test_cache(self, tmp_dir):
+        from src.ast_memory import ASTParser
+        f = os.path.join(tmp_dir, "cached.py")
+        with open(f, "w") as fh:
+            fh.write("x = 1\n")
+        parser = ASTParser()
+        parser.parse_file(f)
+        assert parser.get_stats()["files_cached"] == 1
+        parser.clear_cache()
+        assert parser.get_stats()["files_cached"] == 0
+
+
+# ── Context Manager Tests ──────────────────────────────────────────
+
+class TestContextManager:
+    def test_token_counter(self):
+        from src.context_manager import TokenCounter
+        tc = TokenCounter()
+        assert tc.count("hello world") > 0
+        assert tc.count("") == 0
+
+    def test_context_budget(self):
+        from src.context_manager import ContextBudget
+        b = ContextBudget(total_tokens=1000, system_prompt=200)
+        assert b.total_tokens == 1000
+
+    def test_add_messages(self):
+        from src.context_manager import ContextWindowManager
+        cm = ContextWindowManager()
+        cm.add_message("user", "hello")
+        cm.add_message("assistant", "hi there")
+        assert len(cm._conversation_history) == 2
+
+    def test_set_system_prompt(self):
+        from src.context_manager import ContextWindowManager
+        cm = ContextWindowManager()
+        cm.set_system_prompt("You are Nexus.")
+        assert "Nexus" in cm._system_prompt
+
+    def test_truncate_conversation(self):
+        from src.context_manager import ContextWindowManager
+        cm = ContextWindowManager()
+        for i in range(100):
+            cm.add_message("user", f"message {i}")
+        cm.truncate_conversation(max_tokens=50)
+        assert len(cm._conversation_history) < 100
+
+    def test_select_context(self):
+        from src.context_manager import ContextWindowManager, ContextEntry
+        cm = ContextWindowManager()
+        entries = [
+            ContextEntry(content="important context", source="memory", priority=1, tokens=50),
+            ContextEntry(content="less important", source="memory", priority=8, tokens=100),
+        ]
+        selected = cm.select_context(entries)
+        assert len(selected) >= 1
+
+    def test_usage_stats(self):
+        from src.context_manager import ContextWindowManager
+        cm = ContextWindowManager()
+        stats = cm.get_usage_stats()
+        assert "total_budget" in stats
+        assert "conversation_messages" in stats
+
+    def test_build_context_messages(self):
+        from src.context_manager import ContextWindowManager, ContextEntry
+        cm = ContextWindowManager()
+        cm.set_system_prompt("You are Nexus.")
+        cm.add_message("user", "hello")
+        entries = [ContextEntry(content="context info", source="memory", priority=1, tokens=20)]
+        msgs = cm.build_context_messages(entries)
+        assert msgs[0]["role"] == "system"
+
+
+# ── IDE Tests ───────────────────────────────────────────────────────
+
+class TestIDE:
+    def test_ide_config_defaults(self):
+        from src.ide import IDEConfig, IDEType
+        cfg = IDEConfig()
+        assert cfg.ide_type == IDEType.GENERIC
+        assert cfg.port == 8421
+
+    def test_jsonrpc_handler(self):
+        from src.ide import IDEServer
+        server = IDEServer()
+        server.register_handler("test/hello", lambda params: f"hello {params.get('name', 'world')}")
+        result = server.handle_request({"method": "test/hello", "params": {"name": "nexus"}, "id": 1})
+        assert result["result"] == "hello nexus"
+
+    def test_jsonrpc_unknown_method(self):
+        from src.ide import IDEServer
+        server = IDEServer()
+        result = server.handle_request({"method": "unknown", "id": 1})
+        assert "error" in result
+
+    def test_code_action(self):
+        from src.ide import CodeAction
+        action = CodeAction(title="Fix import", kind="quickfix")
+        assert action.title == "Fix import"
+
+    def test_diagnostic(self):
+        from src.ide import Diagnostic
+        d = Diagnostic(file="test.py", line=10, column=5, severity="error", message="unused var")
+        assert d.severity == "error"
+
+    def test_completion_item(self):
+        from src.ide import CompletionItem
+        item = CompletionItem(label="my_func", kind=3, detail="function")
+        assert item.label == "my_func"
+
+    def test_vscode_manifest(self):
+        from src.ide import generate_vscode_extensionManifest
+        manifest = generate_vscode_extensionManifest()
+        assert manifest["name"] == "nexus-agent"
+        assert len(manifest["contributes"]["commands"]) == 4
+
+    def test_ide_client_init(self):
+        from src.ide import IDEClient
+        client = IDEClient("127.0.0.1", 9999)
+        assert client.port == 9999

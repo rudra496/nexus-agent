@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nexus-agent"
-version = "0.3.0"
+version = "0.4.0"
 description = "The Zero-Config, Self-Evolving Local AI Agent Framework"
 readme = "README.md"
 license = {text = "MIT"}

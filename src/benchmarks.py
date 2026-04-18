@@ -72,8 +72,9 @@ class BenchmarkRunner:
 
     RESULTS_DIR = ".nexus/benchmarks"
 
-    def __init__(self):
-        os.makedirs(self.RESULTS_DIR, exist_ok=True)
+    def __init__(self, results_dir: Optional[str] = None):
+        self.results_dir = results_dir or self.RESULTS_DIR
+        os.makedirs(self.results_dir, exist_ok=True)
 
     def _run_single(self, name: str, fn, iterations: int = 1) -> BenchmarkResult:
         start_mem = _get_memory_mb()
@@ -159,7 +160,7 @@ class BenchmarkRunner:
         """Save benchmark results to file."""
         ts = time.strftime("%Y%m%d_%H%M%S")
         filename = filename or f"benchmark_{ts}.json"
-        path = os.path.join(self.RESULTS_DIR, filename)
+        path = os.path.join(self.results_dir, filename)
         with open(path, "w") as f:
             f.write(suite.to_json())
         return path

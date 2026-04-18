@@ -118,7 +118,7 @@ class CloudSync:
             for root, _, fnames in os.walk(src_dir):
                 for fname in fnames:
                     abs_path = os.path.join(root, fname)
-                    rel_path = os.path.relpath(abs_path)
+                    rel_path = os.path.relpath(abs_path, src_dir)
                     files.append((rel_path, abs_path))
         return files
 

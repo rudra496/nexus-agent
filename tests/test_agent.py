@@ -3,6 +3,7 @@
 import json
 import os
 import tempfile
+import time
 import pytest
 
 from src.agent import NexusAgent
@@ -770,7 +771,7 @@ class TestMarketplace:
 
     def test_marketplace_search(self, tmp_dir):
         from src.marketplace import MarketplaceClient, SkillCategory
-        client = MarketplaceClient(skills_dir=os.path.join(tmp_dir, "cache"))
+        client = MarketplaceClient(skills_dir=os.path.join(tmp_dir, "cache"), cache_file=os.path.join(tmp_dir, "cache.json"))
         client.populate_sample()
         results = client.search("docker")
         assert len(results) >= 1
@@ -778,7 +779,7 @@ class TestMarketplace:
 
     def test_marketplace_search_by_category(self, tmp_dir):
         from src.marketplace import MarketplaceClient, SkillCategory
-        client = MarketplaceClient(skills_dir=os.path.join(tmp_dir, "mp"))
+        client = MarketplaceClient(skills_dir=os.path.join(tmp_dir, "mp"), cache_file=os.path.join(tmp_dir, "mp_cache.json"))
         client.populate_sample()
         results = client.list_all(category=SkillCategory.SECURITY)
         assert all(r.category == SkillCategory.SECURITY for r in results)
@@ -786,7 +787,7 @@ class TestMarketplace:
     def test_marketplace_install(self, tmp_dir):
         from src.marketplace import MarketplaceClient
         skills_dir = os.path.join(tmp_dir, "skills")
-        client = MarketplaceClient(skills_dir=skills_dir)
+        client = MarketplaceClient(skills_dir=skills_dir, cache_file=os.path.join(tmp_dir, "ic.json"))
         client.populate_sample()
         result = client.install("linter_plus")
         assert result["status"] == "ok"
@@ -891,8 +892,7 @@ class TestBenchmarks:
 
     def test_benchmark_save_and_compare(self, tmp_dir):
         from src.benchmarks import BenchmarkRunner, BenchmarkSuite, BenchmarkResult
-        runner = BenchmarkRunner()
-        runner.RESULTS_DIR = tmp_dir
+        runner = BenchmarkRunner(results_dir=tmp_dir)
         suite = BenchmarkSuite(name="test", timestamp=1000, results=[
             BenchmarkResult(name="a", wall_time_s=0.1),
         ])

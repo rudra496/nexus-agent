@@ -57,15 +57,16 @@ class MarketplaceClient:
     DEFAULT_REGISTRY = "https://registry.nexus-agent.dev"
     CACHE_FILE = ".nexus/marketplace_cache.json"
 
-    def __init__(self, registry_url: Optional[str] = None, skills_dir: Optional[str] = None):
+    def __init__(self, registry_url: Optional[str] = None, skills_dir: Optional[str] = None, cache_file: Optional[str] = None):
         self.registry_url = registry_url or self.DEFAULT_REGISTRY
         self.skills_dir = skills_dir or ".nexus/skills"
+        self._cache_file = cache_file or self.CACHE_FILE
         self._cache: list[MarketplaceItem] = []
         self._user_ratings: dict[str, int] = {}  # name -> rating
         self._load_cache()
 
     def _load_cache(self):
-        cache_path = self.CACHE_FILE
+        cache_path = self._cache_file
         if os.path.exists(cache_path):
             try:
                 with open(cache_path) as f:
@@ -76,8 +77,8 @@ class MarketplaceClient:
                 self._cache = []
 
     def _save_cache(self):
-        os.makedirs(os.path.dirname(self.CACHE_FILE) or ".", exist_ok=True)
-        with open(self.CACHE_FILE, "w") as f:
+        os.makedirs(os.path.dirname(self._cache_file) or ".", exist_ok=True)
+        with open(self._cache_file, "w") as f:
             json.dump({"items": [i.to_dict() for i in self._cache], "ratings": self._user_ratings, "updated": time.time()}, f, indent=2)
 
     def refresh(self) -> int:

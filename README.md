@@ -41,7 +41,7 @@
 - 🔌 **Plugin System** — Extend with custom plugins, hot-reload support, hook-based architecture
 - 🐳 **Docker Ready** — Full containerization with Docker and docker-compose support
 - 🌐 **Web Dashboard** — Optional FastAPI dashboard for monitoring skills, memory, and task history
-- 🔒 **Privacy-First** — 100% local execution. No data leaves your machine
+- 🔒 **Privacy-First** — Local-first execution with Ollama. Optional cloud models via LiteLLM.
 - ⚡ **Zero Config** — Works out of the box with Ollama; configurable when you need it
 - 📦 **Sandboxed Execution** — Isolated skill execution with timeouts and memory limits
 - 🚀 **Self-Updating** — Check for new versions, auto-update skills from a registry
@@ -269,7 +269,7 @@ Categories: code-quality, data-processing, devops, research, web, security.
 
 | Feature | NexusAgent | Aider | Continue.dev | Cursor | OpenHands |
 |---------|-----------|-------|-------------|--------|-----------|
-| **Runs 100% Locally** | ✅ | ✅ | ✅ | ❌ | ❌ |
+| **Runs Locally (with Ollama)** | ✅ | ✅ | ✅ | ❌ | ❌ |
 | **GraphRAG Memory** | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **Self-Evolving Skills** | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **Plugin System** | ✅ | ❌ | ✅ | ✅ | ✅ |

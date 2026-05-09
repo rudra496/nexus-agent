@@ -49,7 +49,7 @@ class Sandbox:
             env = os.environ.copy()
 
             # preexec_fn is not available on Windows
-            kwargs = {
+            kwargs: dict[str, Any] = {
                 "capture_output": True,
                 "text": True,
                 "timeout": self.timeout,

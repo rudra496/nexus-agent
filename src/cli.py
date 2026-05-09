@@ -1,5 +1,6 @@
 import os
 import time
+from typing import Any
 
 import typer
 from rich.console import Console
@@ -111,13 +112,14 @@ def config_set(key: str = typer.Argument(..., help="Config key (e.g. model.defau
             raise typer.Exit(1)
     attr = parts[-1]
     old_val = getattr(obj, attr, None)
+    parsed: Any = value
     if isinstance(old_val, bool):
-        value = value.lower() in ("true", "1", "yes")
+        parsed = value.lower() in ("true", "1", "yes")
     elif isinstance(old_val, int):
-        value = int(value)
+        parsed = int(value)
     elif isinstance(old_val, float):
-        value = float(value)
-    setattr(obj, attr, value)
+        parsed = float(value)
+    setattr(obj, attr, parsed)
     save_config(cfg)
     console.print(f"[green]Set {key} = {value}[/green]")
 

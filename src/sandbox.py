@@ -4,8 +4,8 @@ Sandboxed skill execution with subprocess isolation, timeout, and resource limit
 """
 
 import os
-import signal
 import subprocess
+import sys
 import tempfile
 import textwrap
 from pathlib import Path
@@ -47,18 +47,27 @@ class Sandbox:
 
         try:
             env = os.environ.copy()
-            # Resource limit via preexec
-            def preexec():
-                try:
-                    import resource
-                    resource.setrlimit(resource.RLIMIT_AS, (self.max_memory_mb * 1024 * 1024, self.max_memory_mb * 1024 * 1024))
-                except (ImportError, ValueError):
-                    pass
+
+            # preexec_fn is not available on Windows
+            kwargs = {
+                "capture_output": True,
+                "text": True,
+                "timeout": self.timeout,
+                "cwd": self.cwd,
+                "env": env,
+            }
+            if sys.platform != "win32":
+                def preexec():
+                    try:
+                        import resource
+                        resource.setrlimit(resource.RLIMIT_AS, (self.max_memory_mb * 1024 * 1024, self.max_memory_mb * 1024 * 1024))
+                    except (ImportError, ValueError):
+                        pass
+                kwargs["preexec_fn"] = preexec
 
             proc = subprocess.run(
-                ["python3", tmp_path],
-                capture_output=True, text=True, timeout=self.timeout,
-                cwd=self.cwd, env=env, preexec_fn=preexec
+                [sys.executable, tmp_path],
+                **kwargs,
             )
             return SandboxResult(proc.stdout, proc.stderr, proc.returncode)
         except subprocess.TimeoutExpired:

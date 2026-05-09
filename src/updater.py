@@ -24,7 +24,7 @@ PYPI_URL = "https://pypi.org/pypi/nexus-agent/json"
 def check_version() -> dict:
     """Check if a newer version is available on PyPI."""
     if not HAS_REQUESTS:
-        return {"current": "0.2.0", "latest": "unknown", "update_available": False, "error": "requests not installed"}
+        return {"current": "1.0.0", "latest": "unknown", "update_available": False, "error": "requests not installed"}
 
     try:
         resp = requests.get(PYPI_URL, timeout=10)

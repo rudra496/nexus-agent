@@ -7,15 +7,33 @@ from rich.panel import Panel
 from rich.markdown import Markdown
 from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from .agent import NexusAgent
-from .config import load_config, save_config, get_config, NexusConfig
-from .plugins import PluginManager
-from .export import export_skills_json, export_memory_graph, export_markdown_report, export_skill_pack
-from .updater import check_version, update_skills, self_update
+from src.agent import NexusAgent
+from src.config import load_config, save_config, get_config, NexusConfig
+from src.plugins import PluginManager
+from src.export import export_skills_json, export_memory_graph, export_markdown_report, export_skill_pack
+from src.updater import check_version, update_skills, self_update
 
 app = typer.Typer(help="NexusAgent: The Zero-Config, Self-Evolving Local AI Agent.", no_args_is_help=True)
+config_app = typer.Typer(help="Manage NexusAgent configuration.")
+plugin_app = typer.Typer(help="Manage NexusAgent plugins.")
+sync_app = typer.Typer(help="Encrypted cloud sync commands.")
+audit_app = typer.Typer(help="Audit logging & RBAC commands.")
+marketplace_app = typer.Typer(help="Skill & plugin marketplace commands.")
+benchmark_app = typer.Typer(help="Performance benchmark commands.")
+agents_app = typer.Typer(help="Multi-agent orchestration commands.")
+
+app.add_typer(config_app, name="config")
+app.add_typer(plugin_app, name="plugin")
+app.add_typer(sync_app, name="sync")
+app.add_typer(audit_app, name="audit")
+app.add_typer(marketplace_app, name="marketplace")
+app.add_typer(benchmark_app, name="benchmark")
+app.add_typer(agents_app, name="agents")
+
 console = Console()
 
+
+# ── Main Commands ───────────────────────────────────────────────────
 
 @app.command()
 def run(
@@ -52,7 +70,7 @@ def status():
     skill_stats = agent.skill_tree.get_stats()
     pm = PluginManager()
     pm.load_all()
-    table = Table(title="⚡ Nexus Diagnostics")
+    table = Table(title="Nexus Diagnostics")
     table.add_column("Component", style="cyan")
     table.add_column("Value", style="magenta")
     table.add_row("Model", get_config().model.default)
@@ -72,20 +90,15 @@ def skills():
 
 
 # ── Config ──────────────────────────────────────────────────────────
-@app.group()
-def config():
-    """Manage NexusAgent configuration."""
-    pass
 
-
-@config.command("show")
+@config_app.command("show")
 def config_show():
     """Show current configuration."""
     cfg = get_config()
     console.print(Markdown(f"```json\n{cfg.model_dump_json(indent=2)}\n```"))
 
 
-@config.command("set")
+@config_app.command("set")
 def config_set(key: str = typer.Argument(..., help="Config key (e.g. model.default)"), value: str = typer.Argument(..., help="Config value")):
     """Set a configuration value."""
     cfg = get_config()
@@ -109,16 +122,17 @@ def config_set(key: str = typer.Argument(..., help="Config key (e.g. model.defau
     console.print(f"[green]Set {key} = {value}[/green]")
 
 
-@config.command("reset")
+@config_app.command("reset")
 def config_reset():
     """Reset configuration to defaults."""
-    from .config import DEFAULT_CONFIG_FILE
+    from src.config import DEFAULT_CONFIG_FILE
     if DEFAULT_CONFIG_FILE.exists():
         DEFAULT_CONFIG_FILE.unlink()
     console.print("[green]Configuration reset to defaults.[/green]")
 
 
 # ── Web ─────────────────────────────────────────────────────────────
+
 @app.command("web")
 def web_dashboard(
     host: str = typer.Option("127.0.0.1", help="Host to bind"),
@@ -127,7 +141,7 @@ def web_dashboard(
     """Start the web dashboard."""
     console.print(f"[bold cyan]Starting NexusAgent Dashboard on http://{host}:{port}[/bold cyan]")
     try:
-        from .web import run_web
+        from src.web import run_web
         run_web(host, port)
     except ImportError:
         console.print("[red]Install dependencies: pip install fastapi uvicorn[/red]")
@@ -135,6 +149,7 @@ def web_dashboard(
 
 
 # ── Export ──────────────────────────────────────────────────────────
+
 @app.command("export")
 def export_data(
     format: str = typer.Option("json", "--format", "-f", help="Export format: json, markdown, skillpack"),
@@ -161,13 +176,8 @@ def export_data(
 
 
 # ── Plugin ──────────────────────────────────────────────────────────
-@app.group()
-def plugin():
-    """Manage NexusAgent plugins."""
-    pass
 
-
-@plugin.command("list")
+@plugin_app.command("list")
 def plugin_list():
     """List installed plugins."""
     pm = PluginManager()
@@ -185,7 +195,7 @@ def plugin_list():
     console.print(table)
 
 
-@plugin.command("reload")
+@plugin_app.command("reload")
 def plugin_reload():
     """Hot-reload all plugins."""
     pm = PluginManager()
@@ -198,6 +208,7 @@ def plugin_reload():
 
 
 # ── Update ──────────────────────────────────────────────────────────
+
 @app.command("update")
 def update_cmd(
     skills_only: bool = typer.Option(False, "--skills", "-s", help="Only update skills from registry"),
@@ -221,19 +232,14 @@ def update_cmd(
 
 
 # ── Sync ───────────────────────────────────────────────────────────
-@app.group()
-def sync():
-    """Encrypted cloud sync commands."""
-    pass
 
-
-@sync.command("push")
+@sync_app.command("push")
 def sync_push(
     target: str = typer.Option(None, "--target", "-t", help="Sync target path"),
     key: str = typer.Option(None, "--key", "-k", help="Encryption key"),
 ):
     """Push local data to cloud sync target."""
-    from .cloud_sync import CloudSync, SyncConfig
+    from src.cloud_sync import CloudSync, SyncConfig
     cfg = SyncConfig(target_path=target or os.path.join(os.path.expanduser("~"), ".nexus", "sync"), encryption_key=key)
     engine = CloudSync(cfg)
     with console.status("Encrypting and syncing...", spinner="earth"):
@@ -244,13 +250,13 @@ def sync_push(
         console.print(f"[red]{result.get('message', 'Sync failed')}[/red]")
 
 
-@sync.command("pull")
+@sync_app.command("pull")
 def sync_pull(
     target: str = typer.Option(None, "--target", "-t", help="Sync target path"),
     key: str = typer.Option(None, "--key", "-k", help="Encryption key"),
 ):
     """Pull data from cloud sync target."""
-    from .cloud_sync import CloudSync, SyncConfig
+    from src.cloud_sync import CloudSync, SyncConfig
     cfg = SyncConfig(target_path=target or os.path.join(os.path.expanduser("~"), ".nexus", "sync"), encryption_key=key)
     engine = CloudSync(cfg)
     result = engine.pull()
@@ -260,16 +266,16 @@ def sync_pull(
         console.print(f"[red]{result.get('message', 'Pull failed')}[/red]")
 
 
-@sync.command("status")
+@sync_app.command("status")
 def sync_status(
     target: str = typer.Option(None, "--target", "-t", help="Sync target path"),
 ):
     """Show cloud sync status."""
-    from .cloud_sync import CloudSync, SyncConfig
+    from src.cloud_sync import CloudSync, SyncConfig
     cfg = SyncConfig(target_path=target or os.path.join(os.path.expanduser("~"), ".nexus", "sync"))
     engine = CloudSync(cfg)
     status = engine.status()
-    table = Table(title="☁️ Cloud Sync")
+    table = Table(title="Cloud Sync")
     table.add_column("Key", style="cyan")
     table.add_column("Value", style="magenta")
     for k, v in status.items():
@@ -278,19 +284,14 @@ def sync_status(
 
 
 # ── Audit ──────────────────────────────────────────────────────────
-@app.group()
-def audit():
-    """Audit logging & RBAC commands."""
-    pass
 
-
-@audit.command("log")
+@audit_app.command("log")
 def audit_log(
     limit: int = typer.Option(20, "--limit", "-n", help="Number of entries"),
     level: str = typer.Option(None, "--level", "-l", help="Filter by level"),
 ):
     """View audit log entries."""
-    from .audit import AuditLogger, LogLevel
+    from src.audit import AuditLogger, LogLevel
     log_path = os.path.join(os.path.expanduser("~"), ".nexus", "audit.log")
     logger = AuditLogger(log_path=log_path)
     level_filter = LogLevel(level) if level else None
@@ -298,7 +299,7 @@ def audit_log(
     if not entries:
         console.print("[yellow]No audit entries found.[/yellow]")
         return
-    table = Table(title="📋 Audit Log")
+    table = Table(title="Audit Log")
     table.add_column("Time", style="dim")
     table.add_column("Level", style="cyan")
     table.add_column("Action", style="green")
@@ -309,14 +310,14 @@ def audit_log(
     console.print(table)
 
 
-@audit.command("stats")
+@audit_app.command("stats")
 def audit_stats():
     """Show audit log statistics."""
-    from .audit import AuditLogger
+    from src.audit import AuditLogger
     log_path = os.path.join(os.path.expanduser("~"), ".nexus", "audit.log")
     logger = AuditLogger(log_path=log_path)
     stats = logger.stats()
-    table = Table(title="📊 Audit Stats")
+    table = Table(title="Audit Stats")
     table.add_column("Metric", style="cyan")
     table.add_column("Count", style="magenta")
     for k, v in stats.items():
@@ -325,19 +326,14 @@ def audit_stats():
 
 
 # ── Marketplace ────────────────────────────────────────────────────
-@app.group()
-def marketplace():
-    """Skill & plugin marketplace commands."""
-    pass
 
-
-@marketplace.command("search")
+@marketplace_app.command("search")
 def marketplace_search(
     query: str = typer.Argument(..., help="Search query"),
     category: str = typer.Option(None, "--category", "-c", help="Filter by category"),
 ):
     """Search marketplace for skills and plugins."""
-    from .marketplace import MarketplaceClient, SkillCategory
+    from src.marketplace import MarketplaceClient, SkillCategory
     client = MarketplaceClient()
     client.populate_sample()
     cat = SkillCategory(category) if category else None
@@ -345,37 +341,37 @@ def marketplace_search(
     if not results:
         console.print("[yellow]No results found.[/yellow]")
         return
-    table = Table(title="🏪 Marketplace Results")
+    table = Table(title="Marketplace Results")
     table.add_column("Name", style="cyan")
     table.add_column("Category", style="green")
     table.add_column("Rating", style="yellow")
     table.add_column("Downloads", style="magenta")
     for r in results:
-        table.add_row(r.name, r.category.value, f"{'⭐' * int(r.rating)} {r.rating}", str(r.downloads))
+        table.add_row(r.name, r.category.value, f"{'*' * int(r.rating)} {r.rating}", str(r.downloads))
     console.print(table)
 
 
-@marketplace.command("install")
+@marketplace_app.command("install")
 def marketplace_install(
     name: str = typer.Argument(..., help="Skill name to install"),
 ):
     """Install a skill from the marketplace."""
-    from .marketplace import MarketplaceClient
+    from src.marketplace import MarketplaceClient
     client = MarketplaceClient()
     client.populate_sample()
     result = client.install(name)
     if result["status"] == "ok":
-        console.print(f"[green]Installed '{name}' → {result['path']}[/green]")
+        console.print(f"[green]Installed '{name}' -> {result['path']}[/green]")
     else:
         console.print(f"[red]{result.get('message', 'Install failed')}[/red]")
 
 
-@marketplace.command("list")
+@marketplace_app.command("list")
 def marketplace_list(
     category: str = typer.Option(None, "--category", "-c", help="Filter by category"),
 ):
     """List all available marketplace skills."""
-    from .marketplace import MarketplaceClient, SkillCategory
+    from src.marketplace import MarketplaceClient, SkillCategory
     client = MarketplaceClient()
     client.populate_sample()
     cat = SkillCategory(category) if category else None
@@ -383,30 +379,25 @@ def marketplace_list(
     if not items:
         console.print("[yellow]No skills available.[/yellow]")
         return
-    table = Table(title="🏪 Available Skills")
+    table = Table(title="Available Skills")
     table.add_column("Name", style="cyan")
     table.add_column("Version", style="dim")
     table.add_column("Category", style="green")
     table.add_column("Rating", style="yellow")
     table.add_column("Author", style="magenta")
     for i in items:
-        table.add_row(i.name, i.version, i.category.value, f"{'⭐' * max(1, int(i.rating))}", i.author)
+        table.add_row(i.name, i.version, i.category.value, f"{'*' * max(1, int(i.rating))}", i.author)
     console.print(table)
 
 
 # ── Benchmark ──────────────────────────────────────────────────────
-@app.group()
-def benchmark():
-    """Performance benchmark commands."""
-    pass
 
-
-@benchmark.command("run")
+@benchmark_app.command("run")
 def benchmark_run(
     output: str = typer.Option(None, "--output", "-o", help="Output file path"),
 ):
     """Run all performance benchmarks."""
-    from .benchmarks import BenchmarkRunner
+    from src.benchmarks import BenchmarkRunner
     console.print("[bold cyan]Running benchmarks...[/bold cyan]")
     runner = BenchmarkRunner()
     with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), console=console) as progress:
@@ -418,13 +409,13 @@ def benchmark_run(
     console.print(f"[green]Results saved to {path}[/green]")
 
 
-@benchmark.command("compare")
+@benchmark_app.command("compare")
 def benchmark_compare(
     file1: str = typer.Argument(..., help="First benchmark file"),
     file2: str = typer.Argument(..., help="Second benchmark file"),
 ):
     """Compare two benchmark result files."""
-    from .benchmarks import BenchmarkRunner
+    from src.benchmarks import BenchmarkRunner
     runner = BenchmarkRunner()
     try:
         md = runner.compare(file1, file2)
@@ -435,13 +426,14 @@ def benchmark_compare(
 
 
 # ── Mobile ─────────────────────────────────────────────────────────
+
 @app.command("mobile")
 def mobile_cmd(
     host: str = typer.Option("0.0.0.0", help="Host to bind"),
     port: int = typer.Option(8430, help="Port to bind"),
 ):
     """Start the mobile companion API server."""
-    from .mobile import MobileAPI, MobileConfig
+    from src.mobile import MobileAPI, MobileConfig
     cfg = MobileConfig(host=host, port=port)
     api = MobileAPI(cfg)
     console.print(f"[bold cyan]Starting Mobile API on http://{host}:{port}[/bold cyan]")
@@ -452,25 +444,16 @@ def mobile_cmd(
         raise typer.Exit(1)
 
 
-if __name__ == "__main__":
-    app()
-
-
 # ── Multi-Agent ────────────────────────────────────────────────────
-@app.group()
-def agents():
-    """Multi-agent orchestration commands."""
-    pass
 
-
-@agents.command("register")
+@agents_app.command("register")
 def agents_register(
     name: str = typer.Argument(..., help="Agent name"),
     role: str = typer.Option("general", "--role", "-r", help="Agent role: coder, reviewer, tester, planner, researcher, general"),
     model: str = typer.Option(None, "--model", "-m", help="Model override"),
 ):
     """Register a new agent."""
-    from .multi_agent import AgentOrchestrator, AgentConfig, AgentRole
+    from src.multi_agent import AgentOrchestrator, AgentConfig, AgentRole
     orch = AgentOrchestrator()
     role_enum = AgentRole(role)
     config = AgentConfig(role=role_enum, model=model or get_config().model.default)
@@ -478,14 +461,13 @@ def agents_register(
     console.print(f"[green]Agent '{name}' registered with role '{role_enum.value}'[/green]")
 
 
-@agents.command("status")
+@agents_app.command("status")
 def agents_status():
     """Show multi-agent system status."""
-    from .multi_agent import AgentOrchestrator
+    from src.multi_agent import AgentOrchestrator
     orch = AgentOrchestrator()
-    # Load any existing agents from config if needed
     status = orch.get_status()
-    table = Table(title="🤖 Multi-Agent System")
+    table = Table(title="Multi-Agent System")
     table.add_column("Agent", style="cyan")
     table.add_column("Role", style="green")
     table.add_column("Tasks Done", style="magenta")
@@ -496,17 +478,18 @@ def agents_status():
 
 
 # ── Voice ──────────────────────────────────────────────────────────
+
 @app.command("voice")
 def voice_cmd(
     duration: int = typer.Option(5, "--duration", "-d", help="Recording duration in seconds"),
     engine: str = typer.Option("mock", "--engine", "-e", help="TTS engine: mock, pyttsx3, edge_tts"),
 ):
     """Voice interface: listen and respond via speech."""
-    from .voice import VoiceInterface, VoiceConfig, TTSEngine
+    from src.voice import VoiceInterface, VoiceConfig, TTSEngine
     tts_map = {"mock": TTSEngine.MOCK, "pyttsx3": TTSEngine.PYTTSX3, "edge_tts": TTSEngine.EDGE_TTS}
     config = VoiceConfig(tts_engine=tts_map.get(engine, TTSEngine.MOCK))
     vi = VoiceInterface(config)
-    console.print(f"[bold cyan]🎤 Listening for {duration}s...[/bold cyan]")
+    console.print(f"[bold cyan]Listening for {duration}s...[/bold cyan]")
     result = vi.listen(duration)
     console.print(f"[green]Heard:[/green] {result.text}")
     agent = NexusAgent()
@@ -516,27 +499,30 @@ def voice_cmd(
 
 
 # ── AST / Code Analysis ────────────────────────────────────────────
+
 @app.command("analyze")
 def analyze_cmd(
     path: str = typer.Argument(".", help="File or directory to analyze"),
     symbol: str = typer.Option(None, "--symbol", "-s", help="Search for a symbol"),
 ):
     """AST-aware code analysis."""
-    from .ast_memory import ASTParser
-    import glob
+    from src.ast_memory import ASTParser
+    import glob as _glob
 
     parser = ASTParser()
     targets = []
     if os.path.isfile(path):
         targets = [path]
     else:
-        targets = glob.glob(os.path.join(path, "**/*.py"), recursive=True)
+        targets = _glob.glob(os.path.join(path, "**/*.py"), recursive=True)
 
     if not targets:
         console.print("[yellow]No Python files found.[/yellow]")
         raise typer.Exit()
 
     console.print(f"[bold cyan]Analyzing {len(targets)} file(s)...[/bold cyan]")
+
+    parser = ASTParser()
 
     if symbol:
         results = parser.search_symbols(targets, symbol)
@@ -546,7 +532,7 @@ def analyze_cmd(
             console.print(f"  [{r['type']}] {r['name']} at {r['file']}:{r['line']}")
         return
 
-    table = Table(title="📊 Code Analysis")
+    table = Table(title="Code Analysis")
     table.add_column("File", style="cyan")
     table.add_column("Functions", style="green")
     table.add_column("Classes", style="purple")
@@ -564,3 +550,7 @@ def analyze_cmd(
                 str(analysis.line_count),
             )
     console.print(table)
+
+
+if __name__ == "__main__":
+    app()

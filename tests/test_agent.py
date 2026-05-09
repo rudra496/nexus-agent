@@ -33,8 +33,14 @@ from src.multi_agent import (
 
 @pytest.fixture
 def tmp_dir():
-    with tempfile.TemporaryDirectory() as d:
-        yield d
+    d = tempfile.mkdtemp()
+    yield d
+    # Best-effort cleanup; ignore Windows file-locking errors
+    import shutil
+    try:
+        shutil.rmtree(d, ignore_errors=True)
+    except Exception:
+        pass
 
 
 @pytest.fixture

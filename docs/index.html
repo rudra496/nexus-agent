@@ -10,7 +10,6 @@
     <meta name="robots" content="index, follow"/>
     <link rel="canonical" href="https://rudra496.github.io/nexus-agent"/>
     <link rel="sitemap" href="/sitemap.xml"/>
-    <link rel="icon" href="favicon.ico"/>
 
     <!-- Open Graph -->
     <meta property="og:type" content="website"/>
@@ -53,15 +52,6 @@
     }
     </script>
 
-    <!-- Google Analytics placeholder -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX');
-    </script> -->
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -74,162 +64,417 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
         .gradient-text { background: linear-gradient(135deg, #06b6d4, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .dark .glass { background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.05); }
-        .glow { box-shadow: 0 0 40px rgba(6,182,212,0.15); }
-        .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+        .gradient-text-alt { background: linear-gradient(135deg, #22c55e, #06b6d4, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.08); }
+        .dark .glass { background: rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.06); }
+        .glass-strong { background: rgba(255,255,255,0.06); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.12); }
+        .glow { box-shadow: 0 0 60px rgba(6,182,212,0.12), 0 0 120px rgba(168,85,247,0.06); }
+        .glow-cyan { box-shadow: 0 0 40px rgba(6,182,212,0.2); }
+        .glow-purple { box-shadow: 0 0 40px rgba(168,85,247,0.2); }
+        .glow-pink { box-shadow: 0 0 40px rgba(236,72,153,0.2); }
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
-        @keyframes pulse-slow { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
-        .animate-pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
+        .fade-in-left { opacity: 0; transform: translateX(-30px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+        .fade-in-left.visible { opacity: 1; transform: translateX(0); }
+        .fade-in-right { opacity: 0; transform: translateX(30px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+        .fade-in-right.visible { opacity: 1; transform: translateX(0); }
+        @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+        .float { animation: float 6s ease-in-out infinite; }
+        .float-delay { animation: float 6s ease-in-out 2s infinite; }
+        @keyframes pulse-glow { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+        .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
         @keyframes typing { from { width: 0; } to { width: 100%; } }
-        .typing-line { overflow: hidden; white-space: nowrap; border-right: 2px solid #06b6d4; animation: typing 2s steps(40) forwards, blink 0.7s step-end infinite; }
-        @keyframes blink { 50% { border-color: transparent; } }
+        .typing-cursor::after { content: '|'; animation: blink 1s step-end infinite; color: #06b6d4; }
+        @keyframes blink { 50% { opacity: 0; } }
         .counter { font-variant-numeric: tabular-nums; }
+        #particles-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        .feature-card { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .feature-card:hover { transform: translateY(-4px); }
+        .cli-line { opacity: 0; transform: translateY(8px); transition: all 0.4s ease; }
+        .cli-line.visible { opacity: 1; transform: translateY(0); }
+        .tab-active { border-bottom: 2px solid #06b6d4; color: #06b6d4; }
+        details summary::-webkit-details-marker { display: none; }
+        details summary { list-style: none; }
+        details summary::before { content: '+'; display: inline-block; margin-right: 8px; font-size: 1.2em; transition: transform 0.2s; }
+        details[open] summary::before { transform: rotate(45deg); }
+        .scroll-indicator { animation: bounce-down 2s infinite; }
+        @keyframes bounce-down { 0%,20%,50%,80%,100% { transform: translateY(0); } 40% { transform: translateY(8px); } 60% { transform: translateY(4px); } }
+        .border-gradient { border-image: linear-gradient(135deg, #06b6d4, #a855f7) 1; }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300 font-sans">
+<body class="bg-gray-950 text-gray-100 font-sans overflow-x-hidden">
 
     <!-- Nav -->
-    <nav class="fixed top-0 w-full z-50 glass border-b border-gray-200 dark:border-gray-800">
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-2 font-bold text-xl"><span class="text-2xl">⚡</span><span class="gradient-text">NexusAgent</span></a>
-            <div class="hidden md:flex items-center gap-6 text-sm font-medium">
-                <a href="#features" class="hover:text-cyan-500 transition">Features</a>
-                <a href="#how-it-works" class="hover:text-cyan-500 transition">How it Works</a>
-                <a href="#comparison" class="hover:text-cyan-500 transition">Comparison</a>
-                <a href="#docs" class="hover:text-cyan-500 transition">Docs</a>
-                <a href="#faq" class="hover:text-cyan-500 transition">FAQ</a>
-                <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition" aria-label="Toggle theme">🌙</button>
-                <a href="https://github.com/rudra496/nexus-agent" class="px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg font-medium hover:opacity-90 transition">GitHub</a>
+            <a href="#" class="flex items-center gap-2 font-bold text-xl group">
+                <span class="text-2xl group-hover:rotate-12 transition-transform duration-300">⚡</span>
+                <span class="gradient-text">NexusAgent</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="#features" class="text-gray-400 hover:text-white transition-colors">Features</a>
+                <a href="#how-it-works" class="text-gray-400 hover:text-white transition-colors">How it Works</a>
+                <a href="#architecture" class="text-gray-400 hover:text-white transition-colors">Architecture</a>
+                <a href="#comparison" class="text-gray-400 hover:text-white transition-colors">Comparison</a>
+                <a href="#faq" class="text-gray-400 hover:text-white transition-colors">FAQ</a>
+                <button id="theme-toggle" class="p-2 rounded-lg hover:bg-white/10 transition" aria-label="Toggle theme">🌙</button>
+                <a href="https://github.com/rudra496/nexus-agent" class="px-5 py-2 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-200 transition-all hover:scale-105 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    Star on GitHub
+                </a>
             </div>
-            <button id="mobile-menu-btn" class="md:hidden p-2">☰</button>
+            <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-400 hover:text-white">☰</button>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2 text-sm">
-            <a href="#features" class="block py-2 hover:text-cyan-500">Features</a>
-            <a href="#how-it-works" class="block py-2 hover:text-cyan-500">How it Works</a>
-            <a href="#comparison" class="block py-2 hover:text-cyan-500">Comparison</a>
-            <a href="#faq" class="block py-2 hover:text-cyan-500">FAQ</a>
-            <a href="https://github.com/rudra496/nexus-agent" class="block py-2 text-cyan-500">GitHub →</a>
+        <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2 text-sm bg-gray-950/95 backdrop-blur-lg">
+            <a href="#features" class="block py-2 text-gray-400 hover:text-cyan-400">Features</a>
+            <a href="#how-it-works" class="block py-2 text-gray-400 hover:text-cyan-400">How it Works</a>
+            <a href="#architecture" class="block py-2 text-gray-400 hover:text-cyan-400">Architecture</a>
+            <a href="#comparison" class="block py-2 text-gray-400 hover:text-cyan-400">Comparison</a>
+            <a href="#faq" class="block py-2 text-gray-400 hover:text-cyan-400">FAQ</a>
+            <a href="https://github.com/rudra496/nexus-agent" class="block py-2 text-cyan-400 font-semibold">GitHub →</a>
         </div>
     </nav>
 
     <!-- Hero -->
-    <section class="pt-32 pb-20 px-4 text-center">
-        <div class="max-w-4xl mx-auto">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-50 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-sm font-medium mb-6">
-                <span class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse-slow"></span> v1.0 — Production Release
+    <section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+        <canvas id="particles-canvas"></canvas>
+        <!-- Gradient orbs -->
+        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-glow"></div>
+        <div class="absolute bottom-1/4 -right-32 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse-glow" style="animation-delay:1.5s"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/5 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium mb-8">
+                <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                v1.0 — Production Release
             </div>
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
-                The AI Agent That<br/><span class="gradient-text">Builds Its Own Tools</span>
+            <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.95] mb-8 tracking-tight">
+                The AI Agent<br/>
+                <span class="gradient-text">That Builds Its</span><br/>
+                <span class="gradient-text">Own Tools</span>
             </h1>
-            <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-10">
-                Privacy-first, self-evolving AI agent with GraphRAG memory, auto skill generation, plugin ecosystem, and web dashboard. 100% local. Zero config.
+            <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+                Privacy-first, self-evolving AI agent with GraphRAG memory, auto skill generation, plugin ecosystem, and web dashboard.
+                <span class="text-white font-semibold">100% local. Zero config.</span>
             </p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="https://github.com/rudra496/nexus-agent" class="px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-semibold text-lg hover:opacity-90 transition flex items-center gap-2">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                <a href="https://github.com/rudra496/nexus-agent" class="group px-8 py-4 bg-white text-gray-900 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all hover:scale-105 hover:shadow-lg hover:shadow-white/20 flex items-center gap-3">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                     Star on GitHub
+                    <span class="group-hover:translate-x-1 transition-transform">→</span>
                 </a>
-                <a href="#quickstart" class="px-8 py-3 border-2 border-gray-300 dark:border-gray-700 rounded-xl font-semibold text-lg hover:border-cyan-500 transition">Quick Start →</a>
+                <a href="#quickstart" class="px-8 py-4 border border-gray-700 rounded-xl font-bold text-lg hover:border-cyan-500 hover:text-cyan-400 transition-all flex items-center gap-2">
+                    Quick Start
+                </a>
             </div>
-            <div class="mt-12 flex justify-center gap-6 text-sm text-gray-500">
-                <span class="flex items-center gap-1">🛡️ Privacy-First</span>
-                <span class="flex items-center gap-1">⚡ Zero Config</span>
-                <span class="flex items-center gap-1">🔌 Extensible</span>
+            <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
+                <span class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded bg-green-500/20 flex items-center justify-center text-green-400 text-xs">✓</span>
+                    Privacy-First
+                </span>
+                <span class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-xs">✓</span>
+                    Zero Config
+                </span>
+                <span class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded bg-purple-500/20 flex items-center justify-center text-purple-400 text-xs">✓</span>
+                    Self-Evolving
+                </span>
+                <span class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded bg-pink-500/20 flex items-center justify-center text-pink-400 text-xs">✓</span>
+                    MIT Licensed
+                </span>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-indicator">
+            <div class="w-6 h-10 rounded-full border-2 border-gray-600 flex justify-center pt-2">
+                <div class="w-1 h-3 bg-gray-500 rounded-full"></div>
             </div>
         </div>
     </section>
 
     <!-- Stats -->
-    <section class="py-12 px-4 border-y border-gray-200 dark:border-gray-800">
-        <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="11">0</p><p class="text-sm text-gray-500 mt-1">Core Modules</p></div>
-            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="140">0</p><p class="text-sm text-gray-500 mt-1">+ Test Cases</p></div>
-            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="20">0</p><p class="text-sm text-gray-500 mt-1">CLI Commands</p></div>
-            <div><p class="text-3xl sm:text-4xl font-bold gradient-text counter" data-target="100">0</p><p class="text-sm text-gray-500 mt-1">% Open Source</p></div>
+    <section class="py-16 px-4 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.02] to-transparent"></div>
+        <div class="max-w-6xl mx-auto relative">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center glass rounded-2xl p-6 fade-in">
+                    <p class="text-4xl sm:text-5xl font-black gradient-text counter" data-target="11">0</p>
+                    <p class="text-sm text-gray-500 mt-2 font-medium">Core Modules</p>
+                </div>
+                <div class="text-center glass rounded-2xl p-6 fade-in">
+                    <p class="text-4xl sm:text-5xl font-black gradient-text counter" data-target="140">0</p>
+                    <p class="text-sm text-gray-500 mt-2 font-medium">+ Test Cases</p>
+                </div>
+                <div class="text-center glass rounded-2xl p-6 fade-in">
+                    <p class="text-4xl sm:text-5xl font-black gradient-text counter" data-target="20">0</p>
+                    <p class="text-sm text-gray-500 mt-2 font-medium">CLI Commands</p>
+                </div>
+                <div class="text-center glass rounded-2xl p-6 fade-in">
+                    <p class="text-4xl sm:text-5xl font-black gradient-text counter" data-target="100">0</p>
+                    <p class="text-sm text-gray-500 mt-2 font-medium">% Open Source</p>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Features -->
-    <section id="features" class="py-20 px-4">
+    <section id="features" class="py-24 px-4">
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">Packed with Features</h2>
-            <p class="text-gray-500 text-center mb-12 max-w-2xl mx-auto">Everything you need for a powerful, local AI agent that learns and evolves.</p>
+            <div class="text-center mb-16 fade-in">
+                <span class="text-cyan-400 font-semibold text-sm tracking-widest uppercase">Features</span>
+                <h2 class="text-4xl sm:text-5xl font-bold mt-3 mb-4">Packed with Power</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">Everything you need for a powerful, local AI agent that learns and evolves with every interaction.</p>
+            </div>
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="glass rounded-2xl p-6 hover:glow transition fade-in"><div class="text-3xl mb-3">🧠</div><h3 class="font-semibold text-lg mb-2">GraphRAG Memory</h3><p class="text-gray-500 text-sm">Persistent knowledge graph using NetworkX for intelligent context retrieval across sessions.</p></div>
-                <div class="glass rounded-2xl p-6 hover:glow transition fade-in"><div class="text-3xl mb-3">🔧</div><h3 class="font-semibold text-lg mb-2">Auto Skill Generation</h3><p class="text-gray-500 text-sm">The agent writes its own tools during runtime and saves them permanently for reuse.</p></div>
-                <div class="glass rounded-2xl p-6 hover:glow transition fade-in"><div class="text-3xl mb-3">🔌</div><h3 class="font-semibold text-lg mb-2">Plugin System</h3><p class="text-gray-500 text-sm">Extend with custom plugins, hot-reload support, and a hook-based architecture.</p></div>
-                <div class="glass rounded-2xl p-6 hover:glow transition fade-in"><div class="text-3xl mb-3">🌐</div><h3 class="font-semibold text-lg mb-2">Web Dashboard</h3><p class="text-gray-500 text-sm">Optional FastAPI dashboard for monitoring skills, memory graph stats, and task history.</p></div>
-                <div class="glass rounded-2xl p-6 hover:glow transition fade-in"><div class="text-3xl mb-3">🔒</div><h3 class="font-semibold text-lg mb-2">Privacy-First</h3><p class="text-gray-500 text-sm">Local-first execution. Data stays on your machine when using Ollama. Your code, your rules.</p></div>
-                <div class="glass rounded-2xl p-6 hover:glow transition fade-in"><div class="text-3xl mb-3">📦</div><h3 class="font-semibold text-lg mb-2">Sandboxed Execution</h3><p class="text-gray-500 text-sm">Isolated skill execution with subprocess isolation, timeouts, and memory limits.</p></div>
-                <div class="glass rounded-2xl p-6 hover:glow transition fade-in"><div class="text-3xl mb-3">💾</div><h3 class="font-semibold text-lg mb-2">Export System</h3><p class="text-gray-500 text-sm">Export skills, graphs, and reports as JSON, Markdown, or shareable skill packs.</p></div>
-                <div class="glass rounded-2xl p-6 hover:glow transition fade-in"><div class="text-3xl mb-3">🚀</div><h3 class="font-semibold text-lg mb-2">Self-Updating</h3><p class="text-gray-500 text-sm">Check for new versions, auto-update skills from a central registry.</p></div>
-                <div class="glass rounded-2xl p-6 hover:glow transition fade-in"><div class="text-3xl mb-3">🎯</div><h3 class="font-semibold text-lg mb-2">Multi-Model</h3><p class="text-gray-500 text-sm">Works with any model via LiteLLM — Ollama, OpenAI, Anthropic, and more.</p></div>
+                <div class="feature-card glass rounded-2xl p-8 hover:glow-cyan fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center text-2xl mb-5">🧠</div>
+                    <h3 class="font-bold text-xl mb-3">GraphRAG Memory</h3>
+                    <p class="text-gray-400 leading-relaxed">Persistent knowledge graph using NetworkX for intelligent context retrieval across sessions.</p>
+                </div>
+                <div class="feature-card glass rounded-2xl p-8 hover:glow-purple fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-2xl mb-5">🔧</div>
+                    <h3 class="font-bold text-xl mb-3">Auto Skill Generation</h3>
+                    <p class="text-gray-400 leading-relaxed">The agent writes its own tools during runtime and saves them permanently for reuse.</p>
+                </div>
+                <div class="feature-card glass rounded-2xl p-8 hover:glow-pink fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center text-2xl mb-5">🔌</div>
+                    <h3 class="font-bold text-xl mb-3">Plugin System</h3>
+                    <p class="text-gray-400 leading-relaxed">Extend with custom plugins, hot-reload support, and a hook-based architecture.</p>
+                </div>
+                <div class="feature-card glass rounded-2xl p-8 hover:glow-cyan fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center text-2xl mb-5">🌐</div>
+                    <h3 class="font-bold text-xl mb-3">Web Dashboard</h3>
+                    <p class="text-gray-400 leading-relaxed">Optional FastAPI dashboard for monitoring skills, memory graph stats, and task history.</p>
+                </div>
+                <div class="feature-card glass rounded-2xl p-8 hover:glow-purple fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-2xl mb-5">🔒</div>
+                    <h3 class="font-bold text-xl mb-3">Privacy-First</h3>
+                    <p class="text-gray-400 leading-relaxed">Local-first execution with Ollama. Your data stays on your machine. Optional cloud models via LiteLLM.</p>
+                </div>
+                <div class="feature-card glass rounded-2xl p-8 hover:glow-pink fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center text-2xl mb-5">📦</div>
+                    <h3 class="font-bold text-xl mb-3">Sandboxed Execution</h3>
+                    <p class="text-gray-400 leading-relaxed">Isolated skill execution with subprocess isolation, timeouts, and memory limits.</p>
+                </div>
+                <div class="feature-card glass rounded-2xl p-8 hover:glow-cyan fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center text-2xl mb-5">🤖</div>
+                    <h3 class="font-bold text-xl mb-3">Multi-Agent System</h3>
+                    <p class="text-gray-400 leading-relaxed">Orchestrate multiple agents with task delegation, role-based routing, and shared memory.</p>
+                </div>
+                <div class="feature-card glass rounded-2xl p-8 hover:glow-purple fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-2xl mb-5">🛡️</div>
+                    <h3 class="font-bold text-xl mb-3">Enterprise Security</h3>
+                    <p class="text-gray-400 leading-relaxed">Encrypted cloud sync (Fernet), audit logging with RBAC, and structured JSON-lines logs.</p>
+                </div>
+                <div class="feature-card glass rounded-2xl p-8 hover:glow-pink fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center text-2xl mb-5">🎯</div>
+                    <h3 class="font-bold text-xl mb-3">Multi-Model</h3>
+                    <p class="text-gray-400 leading-relaxed">Works with any model via LiteLLM — Ollama, OpenAI, Anthropic, Google, and more.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- How it Works -->
-    <section id="how-it-works" class="py-20 px-4 bg-gray-100 dark:bg-gray-900">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12">How It Works</h2>
+    <section id="how-it-works" class="py-24 px-4 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/[0.02] to-transparent"></div>
+        <div class="max-w-4xl mx-auto relative">
+            <div class="text-center mb-16 fade-in">
+                <span class="text-purple-400 font-semibold text-sm tracking-widest uppercase">How It Works</span>
+                <h2 class="text-4xl sm:text-5xl font-bold mt-3 mb-4">Four Steps to Intelligence</h2>
+                <p class="text-gray-400 text-lg">From zero to a self-evolving AI agent in minutes.</p>
+            </div>
             <div class="space-y-8">
-                <div class="flex gap-4 fade-in"><div class="flex-shrink-0 w-10 h-10 rounded-full bg-cyan-500 text-white flex items-center justify-center font-bold">1</div><div><h3 class="font-semibold text-lg">Install & Run</h3><p class="text-gray-500">Install via pip, pull an Ollama model, and run your first task. Zero configuration needed.</p></div></div>
-                <div class="flex gap-4 fade-in"><div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500 text-white flex items-center justify-center font-bold">2</div><div><h3 class="font-semibold text-lg">Agent Processes & Remembers</h3><p class="text-gray-500">The agent processes your prompt using GraphRAG memory for context-aware responses.</p></div></div>
-                <div class="flex gap-4 fade-in"><div class="flex-shrink-0 w-10 h-10 rounded-full bg-pink-500 text-white flex items-center justify-center font-bold">3</div><div><h3 class="font-semibold text-lg">Skills Auto-Generate</h3><p class="text-gray-500">When the agent needs a tool it doesn't have, it writes one, tests it, and saves it permanently.</p></div></div>
-                <div class="flex gap-4 fade-in"><div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">4</div><div><h3 class="font-semibold text-lg">Evolves Over Time</h3><p class="text-gray-500">With each interaction, the knowledge graph grows and the skill tree expands. Your agent gets smarter.</p></div></div>
+                <div class="flex gap-6 fade-in-left">
+                    <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-cyan-600 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-cyan-500/25">1</div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2">Install & Run</h3>
+                        <p class="text-gray-400 leading-relaxed">Install via pip, pull an Ollama model, and run your first task. No configuration files, no API keys, no setup wizards.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 fade-in-right" style="transition-delay: 0.1s">
+                    <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-purple-500/25">2</div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2">Agent Processes & Remembers</h3>
+                        <p class="text-gray-400 leading-relaxed">The agent processes your prompt using GraphRAG memory for context-aware responses. Every interaction enriches the knowledge graph.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 fade-in-left" style="transition-delay: 0.2s">
+                    <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-pink-600 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-pink-500/25">3</div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2">Skills Auto-Generate</h3>
+                        <p class="text-gray-400 leading-relaxed">When the agent needs a tool it doesn't have, it writes one and saves it permanently. Future requests reuse saved skills automatically.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 fade-in-right" style="transition-delay: 0.3s">
+                    <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-green-500/25">4</div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2">Evolves Over Time</h3>
+                        <p class="text-gray-400 leading-relaxed">With each interaction, the knowledge graph grows and the skill tree expands. Your agent gets smarter the more you use it.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- CLI Demo -->
-    <section id="quickstart" class="py-20 px-4">
+    <section id="quickstart" class="py-24 px-4">
         <div class="max-w-3xl mx-auto">
-            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12">Quick Start</h2>
-            <div class="glass rounded-2xl overflow-hidden">
-                <div class="flex items-center gap-2 px-4 py-3 bg-gray-800 text-gray-300 text-sm">
-                    <span class="w-3 h-3 rounded-full bg-red-500"></span><span class="w-3 h-3 rounded-full bg-yellow-500"></span><span class="w-3 h-3 rounded-full bg-green-500"></span>
-                    <span class="ml-2 font-mono">terminal</span>
+            <div class="text-center mb-16 fade-in">
+                <span class="text-green-400 font-semibold text-sm tracking-widest uppercase">Quick Start</span>
+                <h2 class="text-4xl sm:text-5xl font-bold mt-3 mb-4">Up and Running in 60 Seconds</h2>
+            </div>
+            <div class="glass rounded-2xl overflow-hidden glow fade-in">
+                <div class="flex items-center gap-2 px-5 py-3 bg-gray-900/80 text-gray-400 text-sm border-b border-white/5">
+                    <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+                    <span class="ml-3 font-mono text-gray-500">terminal</span>
                 </div>
-                <div class="p-6 font-mono text-sm space-y-2 bg-gray-950 text-green-400">
-                    <p><span class="text-gray-500">$</span> pip install nexus-agent</p>
-                    <p><span class="text-gray-500">$</span> ollama pull llama3</p>
-                    <p><span class="text-gray-500">$</span> nexus run "Create a Python web scraper"</p>
-                    <p class="text-cyan-400">⚡ NexusAgent initialized. Model: ollama/llama3</p>
-                    <p class="text-cyan-400">🧠 Thinking and consulting GraphRAG memory...</p>
-                    <p class="text-white">Agent Response:</p>
-                    <p class="text-white">  [NEW SKILL: web_scraper]</p>
-                    <p class="text-gray-300">  ```python</p>
-                    <p class="text-gray-300">  import requests</p>
-                    <p class="text-gray-300">  from bs4 import BeautifulSoup</p>
-                    <p class="text-gray-300">  def scrape(url): ...</p>
-                    <p class="text-gray-300">  ```</p>
-                    <p><span class="text-gray-500">$</span> nexus skills</p>
-                    <p class="text-purple-400">📋 Skill Tree: web_scraper ✅</p>
+                <div id="cli-demo" class="p-6 font-mono text-sm space-y-2 bg-gray-950 min-h-[300px]">
+                    <div class="cli-line"><span class="text-gray-600 select-none">$ </span><span class="text-green-400">pip install nexus-agent</span></div>
+                    <div class="cli-line"><span class="text-gray-600 select-none">$ </span><span class="text-green-400">ollama pull llama3</span></div>
+                    <div class="cli-line"><span class="text-gray-600 select-none">$ </span><span class="text-green-400">nexus run "Create a Python web scraper"</span></div>
+                    <div class="cli-line"><br/></div>
+                    <div class="cli-line"><span class="text-cyan-400">⚡ NexusAgent initialized. Model: ollama/llama3</span></div>
+                    <div class="cli-line"><span class="text-cyan-400">🧠 Consulting GraphRAG memory...</span></div>
+                    <div class="cli-line"><br/></div>
+                    <div class="cli-line"><span class="text-white font-semibold">Agent Response:</span></div>
+                    <div class="cli-line"><span class="text-purple-400">  [NEW SKILL: web_scraper]</span></div>
+                    <div class="cli-line"><span class="text-gray-400">  ```python</span></div>
+                    <div class="cli-line"><span class="text-gray-300">  import requests</span></div>
+                    <div class="cli-line"><span class="text-gray-300">  from bs4 import BeautifulSoup</span></div>
+                    <div class="cli-line"><span class="text-gray-300">  def scrape(url): ...</span></div>
+                    <div class="cli-line"><span class="text-gray-400">  ```</span></div>
+                    <div class="cli-line"><br/></div>
+                    <div class="cli-line"><span class="text-gray-600 select-none">$ </span><span class="text-green-400">nexus skills</span></div>
+                    <div class="cli-line"><span class="text-purple-400">📋 Skill Tree: web_scraper ✅</span></div>
+                    <div class="cli-line"><br/></div>
+                    <div class="cli-line"><span class="text-gray-600 select-none">$ </span><span class="text-green-400">nexus evolve</span></div>
+                    <div class="cli-line"><span class="text-cyan-400">⚡ Evolving... Memory graph: 47 nodes, 123 edges</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture -->
+    <section id="architecture" class="py-24 px-4 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.02] to-transparent"></div>
+        <div class="max-w-5xl mx-auto relative">
+            <div class="text-center mb-16 fade-in">
+                <span class="text-cyan-400 font-semibold text-sm tracking-widest uppercase">Architecture</span>
+                <h2 class="text-4xl sm:text-5xl font-bold mt-3 mb-4">How It's Built</h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">A modular architecture designed for extensibility, privacy, and performance.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 fade-in">
+                <!-- Core Engine -->
+                <div class="glass rounded-2xl p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center text-cyan-400">⚡</div>
+                        <h3 class="font-bold text-xl">Core Engine</h3>
+                    </div>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03]">
+                            <span class="text-cyan-400 w-24 font-mono text-xs">NexusAgent</span>
+                            <span class="text-gray-400">Core orchestrator & LiteLLM router</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03]">
+                            <span class="text-green-400 w-24 font-mono text-xs">GraphMemory</span>
+                            <span class="text-gray-400">NetworkX-based GraphRAG store</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03]">
+                            <span class="text-purple-400 w-24 font-mono text-xs">SkillTree</span>
+                            <span class="text-gray-400">Auto-generated tool manager</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03]">
+                            <span class="text-yellow-400 w-24 font-mono text-xs">Sandbox</span>
+                            <span class="text-gray-400">Isolated subprocess execution</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Extensions -->
+                <div class="glass rounded-2xl p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400">🔌</div>
+                        <h3 class="font-bold text-xl">Extensions</h3>
+                    </div>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03]">
+                            <span class="text-pink-400 w-24 font-mono text-xs">Plugins</span>
+                            <span class="text-gray-400">Hot-reload hook system</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03]">
+                            <span class="text-cyan-400 w-24 font-mono text-xs">Web Dashboard</span>
+                            <span class="text-gray-400">FastAPI monitoring UI</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03]">
+                            <span class="text-green-400 w-24 font-mono text-xs">Multi-Agent</span>
+                            <span class="text-gray-400">Task routing & collaboration</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03]">
+                            <span class="text-purple-400 w-24 font-mono text-xs">Cloud Sync</span>
+                            <span class="text-gray-400">Fernet-encrypted sync engine</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Data Flow -->
+            <div class="mt-8 glass rounded-2xl p-8 fade-in">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center text-pink-400">🔄</div>
+                    <h3 class="font-bold text-xl">Data Flow</h3>
+                </div>
+                <div class="flex flex-wrap items-center justify-center gap-3 text-sm">
+                    <span class="px-4 py-2 rounded-lg bg-cyan-500/10 text-cyan-400 font-mono">CLI / Web</span>
+                    <span class="text-gray-600">→</span>
+                    <span class="px-4 py-2 rounded-lg bg-white/[0.05] font-mono">NexusAgent Core</span>
+                    <span class="text-gray-600">→</span>
+                    <span class="px-4 py-2 rounded-lg bg-green-500/10 text-green-400 font-mono">GraphRAG</span>
+                    <span class="text-gray-600">+</span>
+                    <span class="px-4 py-2 rounded-lg bg-purple-500/10 text-purple-400 font-mono">Skills</span>
+                    <span class="text-gray-600">→</span>
+                    <span class="px-4 py-2 rounded-lg bg-yellow-500/10 text-yellow-400 font-mono">LiteLLM</span>
+                    <span class="text-gray-600">→</span>
+                    <span class="px-4 py-2 rounded-lg bg-pink-500/10 text-pink-400 font-mono">Response</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Comparison -->
-    <section id="comparison" class="py-20 px-4 bg-gray-100 dark:bg-gray-900">
+    <section id="comparison" class="py-24 px-4">
         <div class="max-w-5xl mx-auto">
-            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">Why NexusAgent?</h2>
-            <p class="text-center text-gray-500 mb-12 text-sm">Based on publicly available documentation as of April 2026. Please verify for your use case.</p>
-            <div class="overflow-x-auto">
+            <div class="text-center mb-16 fade-in">
+                <span class="text-pink-400 font-semibold text-sm tracking-widest uppercase">Comparison</span>
+                <h2 class="text-4xl sm:text-5xl font-bold mt-3 mb-4">Why NexusAgent?</h2>
+                <p class="text-gray-400 text-sm">Based on publicly available documentation as of April 2026. Verify for your use case.</p>
+            </div>
+            <div class="overflow-x-auto glass rounded-2xl fade-in">
                 <table class="w-full text-sm">
-                    <thead><tr class="border-b border-gray-300 dark:border-gray-700"><th class="text-left py-3 px-4">Feature</th><th class="py-3 px-4 text-cyan-500">NexusAgent</th><th class="py-3 px-4">Aider</th><th class="py-3 px-4">Continue.dev</th><th class="py-3 px-4">Cursor</th><th class="py-3 px-4">OpenHands</th></tr></thead>
+                    <thead>
+                        <tr class="border-b border-white/10">
+                            <th class="text-left py-4 px-5 font-semibold text-gray-300">Feature</th>
+                            <th class="py-4 px-5 font-bold gradient-text">NexusAgent</th>
+                            <th class="py-4 px-5 text-gray-400">Aider</th>
+                            <th class="py-4 px-5 text-gray-400">Continue.dev</th>
+                            <th class="py-4 px-5 text-gray-400">Cursor</th>
+                            <th class="py-4 px-5 text-gray-400">OpenHands</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Runs Locally (with Ollama)</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">GraphRAG Memory</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Self-Evolving Skills</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Plugin System</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td></tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Zero-Config Setup</td><td class="text-center text-green-500">✅</td><td class="text-center text-yellow-500">⚠️</td><td class="text-center text-yellow-500">⚠️</td><td class="text-center text-green-500">✅</td><td class="text-center text-yellow-500">⚠️</td></tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">CLI Interface</td><td class="text-center text-green-500">✅</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td></tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-800"><td class="py-2 px-4">Sandboxed Execution</td><td class="text-center text-green-500">✅</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-red-400">❌</td><td class="text-center text-green-500">✅</td></tr>
-                        <tr><td class="py-2 px-4">Open Source</td><td class="text-center text-green-500">MIT</td><td class="text-center text-green-500">Apache</td><td class="text-center text-green-500">Apache</td><td class="text-center text-red-400">Proprietary</td><td class="text-center text-green-500">MIT</td></tr>
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition"><td class="py-3 px-5">Runs Locally (with Ollama)</td><td class="text-center text-green-400">✅</td><td class="text-center text-green-400">✅</td><td class="text-center text-green-400">✅</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-red-400/60">❌</td></tr>
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition"><td class="py-3 px-5">GraphRAG Memory</td><td class="text-center text-green-400">✅</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-red-400/60">❌</td></tr>
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition"><td class="py-3 px-5">Self-Evolving Skills</td><td class="text-center text-green-400">✅</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-red-400/60">❌</td></tr>
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition"><td class="py-3 px-5">Plugin System</td><td class="text-center text-green-400">✅</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-green-400">✅</td><td class="text-center text-green-400">✅</td><td class="text-center text-green-400">✅</td></tr>
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition"><td class="py-3 px-5">Zero-Config Setup</td><td class="text-center text-green-400">✅</td><td class="text-center text-yellow-400">⚠️</td><td class="text-center text-yellow-400">⚠️</td><td class="text-center text-green-400">✅</td><td class="text-center text-yellow-400">⚠️</td></tr>
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition"><td class="py-3 px-5">CLI Interface</td><td class="text-center text-green-400">✅</td><td class="text-center text-green-400">✅</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-red-400/60">❌</td></tr>
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition"><td class="py-3 px-5">Sandboxed Execution</td><td class="text-center text-green-400">✅</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-red-400/60">❌</td><td class="text-center text-green-400">✅</td></tr>
+                        <tr class="hover:bg-white/[0.02] transition"><td class="py-3 px-5">Open Source</td><td class="text-center text-green-400 font-semibold">MIT</td><td class="text-center text-green-400">Apache</td><td class="text-center text-green-400">Apache</td><td class="text-center text-red-400/60">Proprietary</td><td class="text-center text-green-400">MIT</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -237,106 +482,264 @@
     </section>
 
     <!-- Key Principles -->
-    <section class="py-20 px-4">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-12">Built on Principles</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="glass rounded-2xl p-6 fade-in"><div class="text-3xl mb-3">🔒</div><h3 class="font-semibold text-lg mb-2">Privacy by Design</h3><p class="text-gray-500 text-sm">No telemetry, no tracking, no data leaves your machine. Your code stays yours.</p></div>
-                <div class="glass rounded-2xl p-6 fade-in"><div class="text-3xl mb-3">🌱</div><h3 class="font-semibold text-lg mb-2">Self-Improving</h3><p class="text-gray-500 text-sm">The more you use it, the more capable it becomes. Skills accumulate over time.</p></div>
-                <div class="glass rounded-2xl p-6 fade-in"><div class="text-3xl mb-3">🔓</div><h3 class="font-semibold text-lg mb-2">Open & Extensible</h3><p class="text-gray-500 text-sm">MIT licensed with a plugin system. Modify, extend, and share freely.</p></div>
+    <section class="py-24 px-4 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/[0.02] to-transparent"></div>
+        <div class="max-w-4xl mx-auto relative">
+            <div class="text-center mb-16 fade-in">
+                <span class="text-green-400 font-semibold text-sm tracking-widest uppercase">Principles</span>
+                <h2 class="text-4xl sm:text-5xl font-bold mt-3">Built on Principles</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass rounded-2xl p-8 text-center hover:glow-cyan transition-all duration-300 fade-in">
+                    <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-3xl mx-auto mb-5">🔒</div>
+                    <h3 class="font-bold text-xl mb-3">Privacy by Design</h3>
+                    <p class="text-gray-400 leading-relaxed">No telemetry, no tracking, no data leaves your machine when using local models. Your code stays yours.</p>
+                </div>
+                <div class="glass rounded-2xl p-8 text-center hover:glow-purple transition-all duration-300 fade-in" style="transition-delay: 0.1s">
+                    <div class="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center text-3xl mx-auto mb-5">🌱</div>
+                    <h3 class="font-bold text-xl mb-3">Self-Improving</h3>
+                    <p class="text-gray-400 leading-relaxed">The more you use it, the more capable it becomes. Skills accumulate and the knowledge graph grows organically.</p>
+                </div>
+                <div class="glass rounded-2xl p-8 text-center hover:glow-pink transition-all duration-300 fade-in" style="transition-delay: 0.2s">
+                    <div class="w-16 h-16 rounded-2xl bg-pink-500/10 flex items-center justify-center text-3xl mx-auto mb-5">🔓</div>
+                    <h3 class="font-bold text-xl mb-3">Open & Extensible</h3>
+                    <p class="text-gray-400 leading-relaxed">MIT licensed with a plugin system. Modify, extend, and share freely. No vendor lock-in.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Roadmap -->
-    <section class="py-20 px-4 bg-gray-100 dark:bg-gray-900">
+    <section class="py-24 px-4">
         <div class="max-w-3xl mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12">Roadmap</h2>
+            <div class="text-center mb-16 fade-in">
+                <span class="text-yellow-400 font-semibold text-sm tracking-widest uppercase">Roadmap</span>
+                <h2 class="text-4xl sm:text-5xl font-bold mt-3">The Journey So Far</h2>
+            </div>
             <div class="space-y-6">
-                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-green-500 font-bold">✅</span><div><h3 class="font-semibold">v0.1 — Core Agent</h3><p class="text-gray-500 text-sm">GraphRAG memory (NetworkX), auto skill generation, CLI (run, evolve, status, skills), LiteLLM + Ollama</p></div></div>
-                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-green-500 font-bold">✅</span><div><h3 class="font-semibold">v0.2 — Plugins & Dashboard</h3><p class="text-gray-500 text-sm">Config management (YAML/JSON), plugin system with hot-reload, FastAPI dashboard, sandboxed execution, export (JSON/Markdown/ZIP), self-updater, Docker, CI/CD, 30+ tests</p></div></div>
-                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-green-500 font-bold">✅</span><div><h3 class="font-semibold">v0.3 — Multi-Agent</h3><p class="text-gray-500 text-sm">Orchestration engine, task delegation & routing, collaborative shared memory, agent communication protocol, roles (coder/reviewer/tester/planner), priority queue</p></div></div>
-                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-green-500 font-bold">✅</span><div><h3 class="font-semibold">v0.4 — Voice & IDE</h3><p class="text-gray-500 text-sm">Voice interface (Whisper STT + TTS), IDE integration (JSON-RPC, VS Code), AST-aware code memory, context window management</p></div></div>
-                <div class="flex gap-4 fade-in"><span class="flex-shrink-0 text-green-500 font-bold">✅</span><div><h3 class="font-semibold">v1.0 — Production</h3><p class="text-gray-500 text-sm">Encrypted cloud sync, audit logging & RBAC, skill marketplace, performance benchmarks, mobile companion API</p></div></div>
+                <div class="flex gap-5 fade-in">
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold text-sm">✓</div>
+                        <div class="w-px flex-1 bg-gradient-to-b from-green-500/30 to-transparent mt-2"></div>
+                    </div>
+                    <div class="pb-6"><h3 class="font-bold text-lg">v0.1 — Core Agent</h3><p class="text-gray-400 text-sm mt-1">GraphRAG memory (NetworkX), auto skill generation, CLI, LiteLLM + Ollama</p></div>
+                </div>
+                <div class="flex gap-5 fade-in">
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold text-sm">✓</div>
+                        <div class="w-px flex-1 bg-gradient-to-b from-green-500/30 to-transparent mt-2"></div>
+                    </div>
+                    <div class="pb-6"><h3 class="font-bold text-lg">v0.2 — Plugins & Dashboard</h3><p class="text-gray-400 text-sm mt-1">Config management, plugin system with hot-reload, FastAPI dashboard, sandboxed execution, export, Docker, CI/CD</p></div>
+                </div>
+                <div class="flex gap-5 fade-in">
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold text-sm">✓</div>
+                        <div class="w-px flex-1 bg-gradient-to-b from-green-500/30 to-transparent mt-2"></div>
+                    </div>
+                    <div class="pb-6"><h3 class="font-bold text-lg">v0.3 — Multi-Agent</h3><p class="text-gray-400 text-sm mt-1">Orchestration engine, task delegation & routing, collaborative shared memory, agent roles, priority queue</p></div>
+                </div>
+                <div class="flex gap-5 fade-in">
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold text-sm">✓</div>
+                        <div class="w-px flex-1 bg-gradient-to-b from-green-500/30 to-transparent mt-2"></div>
+                    </div>
+                    <div class="pb-6"><h3 class="font-bold text-lg">v0.4 — Voice & IDE</h3><p class="text-gray-400 text-sm mt-1">Voice interface (Whisper STT + TTS), IDE integration (JSON-RPC), AST-aware code memory, context window management</p></div>
+                </div>
+                <div class="flex gap-5 fade-in">
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-sm">✓</div>
+                    </div>
+                    <div><h3 class="font-bold text-lg gradient-text">v1.0 — Production</h3><p class="text-gray-400 text-sm mt-1">Encrypted cloud sync, audit logging & RBAC, skill marketplace, performance benchmarks, mobile companion API, 140+ tests</p></div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- FAQ -->
-    <section id="faq" class="py-20 px-4">
-        <div class="max-w-3xl mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12">FAQ</h2>
-            <div class="space-y-3" id="faq-container">
-                <details class="glass rounded-xl group"><summary class="p-4 cursor-pointer font-medium flex justify-between items-center">Is my data sent anywhere?<span class="group-open:rotate-45 transition-transform text-xl">+</span></summary><div class="px-4 pb-4 text-gray-500 text-sm">By default, NexusAgent uses local Ollama models. If you configure cloud providers (OpenAI, Anthropic), prompts will be sent to those APIs. No additional telemetry or tracking is collected.</div></details>
-                <details class="glass rounded-xl group"><summary class="p-4 cursor-pointer font-medium flex justify-between items-center">What models does it support?<span class="group-open:rotate-45 transition-transform text-xl">+</span></summary><div class="px-4 pb-4 text-gray-500 text-sm">Any model supported by LiteLLM: Ollama (Llama, Mistral, CodeLlama, etc.), OpenAI (GPT-4), Anthropic (Claude), and more.</div></details>
-                <details class="glass rounded-xl group"><summary class="p-4 cursor-pointer font-medium flex justify-between items-center">How does self-evolution work?<span class="group-open:rotate-45 transition-transform text-xl">+</span></summary><div class="px-4 pb-4 text-gray-500 text-sm">When the agent encounters a task requiring a tool it doesn't have, it generates the tool code and saves it permanently to the skill tree. Future similar requests reuse the saved skill instead of regenerating code.</div></details>
-                <details class="glass rounded-xl group"><summary class="p-4 cursor-pointer font-medium flex justify-between items-center">Can I use it without Ollama?<span class="group-open:rotate-45 transition-transform text-xl">+</span></summary><div class="px-4 pb-4 text-gray-500 text-sm">Yes. Configure any LiteLLM-compatible provider via `nexus config set model.default openai/gpt-4`. You'll need an API key for cloud providers.</div></details>
-                <details class="glass rounded-xl group"><summary class="p-4 cursor-pointer font-medium flex justify-between items-center">How do I write plugins?<span class="group-open:rotate-45 transition-transform text-xl">+</span></summary><div class="px-4 pb-4 text-gray-500 text-sm">Create a Python file in `.nexus/plugins/` with functions named `nexus_*`. These become hooks that are called at various points in the agent lifecycle. See the plugin guide for details.</div></details>
+    <section id="faq" class="py-24 px-4 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-pink-500/[0.02] to-transparent"></div>
+        <div class="max-w-3xl mx-auto relative">
+            <div class="text-center mb-16 fade-in">
+                <span class="text-cyan-400 font-semibold text-sm tracking-widest uppercase">FAQ</span>
+                <h2 class="text-4xl sm:text-5xl font-bold mt-3">Common Questions</h2>
+            </div>
+            <div class="space-y-4 fade-in" id="faq-container">
+                <details class="glass rounded-xl group">
+                    <summary class="p-5 cursor-pointer font-semibold flex justify-between items-center hover:text-cyan-400 transition-colors">
+                        Is my data sent anywhere?
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-400 leading-relaxed">By default, NexusAgent uses local Ollama models — no data leaves your machine. If you configure cloud providers (OpenAI, Anthropic), only prompts are sent to those APIs. No additional telemetry or tracking is collected.</div>
+                </details>
+                <details class="glass rounded-xl group">
+                    <summary class="p-5 cursor-pointer font-semibold flex justify-between items-center hover:text-cyan-400 transition-colors">
+                        What models does it support?
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-400 leading-relaxed">Any model supported by LiteLLM: Ollama (Llama, Mistral, CodeLlama, etc.), OpenAI (GPT-4), Anthropic (Claude), Google (Gemini), and dozens more. Configure with <code class="px-2 py-0.5 rounded bg-white/5 text-cyan-400 font-mono text-sm">nexus config set model.default &lt;model&gt;</code>.</div>
+                </details>
+                <details class="glass rounded-xl group">
+                    <summary class="p-5 cursor-pointer font-semibold flex justify-between items-center hover:text-cyan-400 transition-colors">
+                        How does self-evolution work?
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-400 leading-relaxed">When the agent encounters a task requiring a tool it doesn't have, it generates the tool code and saves it permanently to the skill tree. Future similar requests reuse the saved skill instead of regenerating code. The <code class="px-2 py-0.5 rounded bg-white/5 text-cyan-400 font-mono text-sm">nexus evolve</code> command scans your workspace to enrich the knowledge graph.</div>
+                </details>
+                <details class="glass rounded-xl group">
+                    <summary class="p-5 cursor-pointer font-semibold flex justify-between items-center hover:text-cyan-400 transition-colors">
+                        Can I use it without Ollama?
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-400 leading-relaxed">Yes. Configure any LiteLLM-compatible provider via <code class="px-2 py-0.5 rounded bg-white/5 text-cyan-400 font-mono text-sm">nexus config set model.default openai/gpt-4</code>. You'll need an API key set as an environment variable for cloud providers.</div>
+                </details>
+                <details class="glass rounded-xl group">
+                    <summary class="p-5 cursor-pointer font-semibold flex justify-between items-center hover:text-cyan-400 transition-colors">
+                        How do I write plugins?
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-400 leading-relaxed">Create a Python file in <code class="px-2 py-0.5 rounded bg-white/5 text-cyan-400 font-mono text-sm">.nexus/plugins/</code> with functions prefixed <code class="px-2 py-0.5 rounded bg-white/5 text-cyan-400 font-mono text-sm">nexus_*</code>. These hooks are called automatically at various points in the agent lifecycle. See the <a href="plugin-guide.md" class="text-cyan-400 hover:underline">plugin guide</a> for details.</div>
+                </details>
+                <details class="glass rounded-xl group">
+                    <summary class="p-5 cursor-pointer font-semibold flex justify-between items-center hover:text-cyan-400 transition-colors">
+                        Does it work on Windows?
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-400 leading-relaxed">Yes. NexusAgent is cross-platform and works on Windows, macOS, and Linux. Sandboxed execution uses <code class="px-2 py-0.5 rounded bg-white/5 text-cyan-400 font-mono text-sm">sys.executable</code> for compatibility across platforms.</div>
+                </details>
             </div>
         </div>
     </section>
 
     <!-- Docs -->
-    <section id="docs" class="py-20 px-4 bg-gray-100 dark:bg-gray-900">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-4">Documentation</h2>
-            <p class="text-gray-500 mb-8">Everything you need to get the most out of NexusAgent.</p>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <a href="configuration.md" class="glass rounded-xl p-4 hover:glow transition text-left"><h3 class="font-semibold mb-1">📄 Configuration</h3><p class="text-gray-500 text-sm">Full config reference</p></a>
-                <a href="plugin-guide.md" class="glass rounded-xl p-4 hover:glow transition text-left"><h3 class="font-semibold mb-1">🔌 Plugin Guide</h3><p class="text-gray-500 text-sm">Write custom plugins</p></a>
-                <a href="api-reference.md" class="glass rounded-xl p-4 hover:glow transition text-left"><h3 class="font-semibold mb-1">📚 API Reference</h3><p class="text-gray-500 text-sm">Programmatic usage</p></a>
-                <a href="advanced_tutorial.md" class="glass rounded-xl p-4 hover:glow transition text-left"><h3 class="font-semibold mb-1">🎓 Advanced Tutorial</h3><p class="text-gray-500 text-sm">Deep dive guide</p></a>
+    <section id="docs" class="py-24 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <span class="text-purple-400 font-semibold text-sm tracking-widest uppercase">Documentation</span>
+                <h2 class="text-4xl sm:text-5xl font-bold mt-3 mb-4">Learn More</h2>
+                <p class="text-gray-400 text-lg">Everything you need to get the most out of NexusAgent.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 fade-in">
+                <a href="configuration.md" class="glass rounded-xl p-6 hover:glow-cyan transition-all duration-300 group">
+                    <div class="text-2xl mb-3">📄</div>
+                    <h3 class="font-bold mb-1 group-hover:text-cyan-400 transition-colors">Configuration</h3>
+                    <p class="text-gray-500 text-sm">Full config reference</p>
+                </a>
+                <a href="plugin-guide.md" class="glass rounded-xl p-6 hover:glow-purple transition-all duration-300 group">
+                    <div class="text-2xl mb-3">🔌</div>
+                    <h3 class="font-bold mb-1 group-hover:text-purple-400 transition-colors">Plugin Guide</h3>
+                    <p class="text-gray-500 text-sm">Write custom plugins</p>
+                </a>
+                <a href="api-reference.md" class="glass rounded-xl p-6 hover:glow-pink transition-all duration-300 group">
+                    <div class="text-2xl mb-3">📚</div>
+                    <h3 class="font-bold mb-1 group-hover:text-pink-400 transition-colors">API Reference</h3>
+                    <p class="text-gray-500 text-sm">Programmatic usage</p>
+                </a>
+                <a href="advanced_tutorial.md" class="glass rounded-xl p-6 hover:glow-cyan transition-all duration-300 group">
+                    <div class="text-2xl mb-3">🎓</div>
+                    <h3 class="font-bold mb-1 group-hover:text-cyan-400 transition-colors">Advanced Tutorial</h3>
+                    <p class="text-gray-500 text-sm">Deep dive guide</p>
+                </a>
             </div>
         </div>
     </section>
 
     <!-- CTA -->
-    <section class="py-20 px-4 text-center">
-        <div class="max-w-2xl mx-auto">
-            <h2 class="text-3xl sm:text-4xl font-bold mb-4">Ready to Build?</h2>
-            <p class="text-gray-500 mb-8">Get started with NexusAgent in under 2 minutes.</p>
-            <code class="inline-block px-6 py-3 bg-gray-900 text-green-400 rounded-xl font-mono text-lg">pip install nexus-agent</code>
+    <section class="py-24 px-4 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.03] to-transparent"></div>
+        <div class="max-w-3xl mx-auto text-center relative">
+            <div class="fade-in">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-4">Ready to Build?</h2>
+                <p class="text-gray-400 text-lg mb-10">Get started with NexusAgent in under 2 minutes.</p>
+                <div class="glass rounded-2xl p-8 inline-block">
+                    <code class="text-xl sm:text-2xl font-mono">
+                        <span class="text-gray-500 select-none">$ </span><span class="text-green-400">pip install nexus-agent</span>
+                    </code>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-200 dark:border-gray-800 py-12 px-4">
+    <footer class="border-t border-white/5 py-16 px-4">
         <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-2 font-bold text-lg"><span>⚡</span><span class="gradient-text">NexusAgent</span></div>
-                <div class="flex items-center gap-4 text-gray-500">
-                    <a href="https://github.com/rudra496" class="hover:text-gray-900 dark:hover:text-white transition" aria-label="GitHub"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
-                    <a href="https://www.linkedin.com/in/rudrasarker" class="hover:text-gray-900 dark:hover:text-white transition" aria-label="LinkedIn"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
-                    <a href="https://x.com/Rudra496" class="hover:text-gray-900 dark:hover:text-white transition" aria-label="X/Twitter"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                    <a href="https://rudra496.github.io/site" class="hover:text-gray-900 dark:hover:text-white transition" aria-label="Portfolio">🌐</a>
-                    <a href="https://dev.to/rudra_sarker" class="hover:text-gray-900 dark:hover:text-white transition" aria-label="Dev.to">📝</a>
-                    <a href="https://www.youtube.com/@rudrasarker9732" class="hover:text-gray-900 dark:hover:text-white transition" aria-label="YouTube">📺</a>
-                    <a href="https://www.instagram.com/rudrasarker/" class="hover:text-gray-900 dark:hover:text-white transition" aria-label="Instagram">📸</a>
-                    <a href="https://www.researchgate.net/profile/Rudra-Sarker-3" class="hover:text-gray-900 dark:hover:text-white transition" aria-label="ResearchGate">🔬</a>
-                    <a href="https://www.facebook.com/rudrasarker130" class="hover:text-gray-900 dark:hover:text-white transition" aria-label="Facebook">📘</a>
-                    <a href="mailto:rudrasarker130@gmail.com" class="hover:text-gray-900 dark:hover:text-white transition" aria-label="Email">✉️</a>
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div>
+                    <a href="#" class="flex items-center gap-2 font-bold text-xl mb-3">
+                        <span class="text-2xl">⚡</span><span class="gradient-text">NexusAgent</span>
+                    </a>
+                    <p class="text-gray-500 text-sm max-w-xs">The Zero-Config, Self-Evolving Local AI Agent Framework. Privacy-first, open source, endlessly extensible.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="https://github.com/rudra496" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition" aria-label="GitHub">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/rudrasarker" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition" aria-label="LinkedIn">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <a href="https://x.com/Rudra496" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition" aria-label="X/Twitter">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="https://dev.to/rudra_sarker" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition" aria-label="Dev.to">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .65-.08.84-.23.2-.16.3-.46.3-.91v-2.07c0-.45-.1-.76-.3-.92zM0 4.94v14.12h24V4.94H0zM8.56 15.3c-.44.58-1.06.77-1.98.77H4.38V8.08h2.2c.92 0 1.54.19 1.98.78.44.58.58 1.23.58 3.22 0 1.98-.14 2.64-.58 3.22zm4.69-5.6H10.5v2.49h1.75v1.75H10.5v2.49h2.75v1.75H9.29V7.95h3.96v1.75zm6.97 7.05h-1.56l-1.65-4.77V16.75h-1.56V7.95h1.56l1.65 4.77V7.95h1.56v8.8z"/></svg>
+                    </a>
+                    <a href="https://rudra496.github.io/site" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition" aria-label="Portfolio">🌐</a>
                 </div>
             </div>
-            <div class="mt-8 text-center text-sm text-gray-400">
-                <p>© 2024 Rudra Sarker. MIT License. Built with ⚡ by <a href="https://github.com/rudra496" class="text-cyan-500 hover:underline">rudra496</a></p>
+            <div class="mt-10 pt-6 border-t border-white/5 text-center text-sm text-gray-600">
+                <p>&copy; 2024&ndash;2026 Rudra Sarker. MIT License. Built with ⚡ by <a href="https://github.com/rudra496" class="text-cyan-400/60 hover:text-cyan-400 transition">rudra496</a></p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Theme toggle
+        // Theme toggle (light mode support)
         const btn = document.getElementById('theme-toggle');
         const html = document.documentElement;
-        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) html.classList.add('dark');
-        btn.textContent = html.classList.contains('dark') ? '☀️' : '🌙';
-        btn.onclick = () => { html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); btn.textContent = html.classList.contains('dark') ? '☀️' : '🌙'; };
+        const body = document.body;
+        if (localStorage.getItem('theme') === 'light') {
+            html.classList.remove('dark');
+            body.classList.remove('bg-gray-950', 'text-gray-100');
+            body.classList.add('bg-gray-50', 'text-gray-900');
+        }
+        // Default: dark mode
+        if (!localStorage.getItem('theme') || localStorage.getItem('theme') === 'dark') {
+            html.classList.add('dark');
+        }
+        btn.onclick = () => {
+            const isLight = !html.classList.contains('dark');
+            if (isLight) {
+                html.classList.add('dark');
+                body.classList.add('bg-gray-950', 'text-gray-100');
+                body.classList.remove('bg-gray-50', 'text-gray-900');
+                localStorage.setItem('theme', 'dark');
+                btn.textContent = '🌙';
+            } else {
+                html.classList.remove('dark');
+                body.classList.remove('bg-gray-950', 'text-gray-100');
+                body.classList.add('bg-gray-50', 'text-gray-900');
+                localStorage.setItem('theme', 'light');
+                btn.textContent = '☀️';
+            }
+        };
 
         // Mobile menu
-        document.getElementById('mobile-menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+        document.getElementById('mobile-menu-btn').onclick = () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        };
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-gray-950/80', 'backdrop-blur-xl', 'border-b', 'border-white/5');
+            } else {
+                navbar.classList.remove('bg-gray-950/80', 'backdrop-blur-xl', 'border-b', 'border-white/5');
+            }
+        });
 
         // Scroll animations
-        const observer = new IntersectionObserver((entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right').forEach(el => observer.observe(el));
 
         // Animated counters
         const counterObserver = new IntersectionObserver((entries) => {
@@ -344,13 +747,119 @@
                 if (e.isIntersecting) {
                     const target = +e.target.dataset.target;
                     let current = 0;
-                    const step = Math.ceil(target / 60);
-                    const timer = setInterval(() => { current += step; if (current >= target) { current = target; clearInterval(timer); } e.target.textContent = current + (target === 100 ? '%' : '+'); }, 30);
+                    const duration = 1500;
+                    const startTime = performance.now();
+                    function update(now) {
+                        const elapsed = now - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        // Ease out cubic
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        current = Math.round(eased * target);
+                        e.target.textContent = current + (target === 100 ? '%' : '+');
+                        if (progress < 1) requestAnimationFrame(update);
+                    }
+                    requestAnimationFrame(update);
                     counterObserver.unobserve(e.target);
                 }
             });
         }, { threshold: 0.5 });
         document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+        // CLI demo typing animation
+        const cliObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const lines = e.target.querySelectorAll('.cli-line');
+                    lines.forEach((line, i) => {
+                        setTimeout(() => line.classList.add('visible'), i * 150);
+                    });
+                    cliObserver.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        const cliDemo = document.getElementById('cli-demo');
+        if (cliDemo) cliObserver.observe(cliDemo);
+
+        // Particle canvas
+        const canvas = document.getElementById('particles-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let animFrame;
+            function resizeCanvas() {
+                canvas.width = canvas.parentElement.offsetWidth;
+                canvas.height = canvas.parentElement.offsetHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            function createParticles() {
+                particles = [];
+                const count = Math.min(60, Math.floor(canvas.width * canvas.height / 15000));
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3,
+                        r: Math.random() * 1.5 + 0.5,
+                        a: Math.random() * 0.3 + 0.1,
+                    });
+                }
+            }
+            createParticles();
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (const p of particles) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(6, 182, 212, ${p.a})`;
+                    ctx.fill();
+                }
+                // Draw connections
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(6, 182, 212, ${0.06 * (1 - dist / 120)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                animFrame = requestAnimationFrame(drawParticles);
+            }
+            drawParticles();
+
+            // Respect reduced motion
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                cancelAnimationFrame(animFrame);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Close mobile menu
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
     </script>
 </body>
 </html>

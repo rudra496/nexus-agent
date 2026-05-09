@@ -68,10 +68,13 @@ def _get_fernet(key: Optional[str]):
         return None
     try:
         from cryptography.fernet import Fernet
+        import base64
         if len(key) == 44 and key.endswith("="):
-            return Fernet(key)
-        fkey = hashlib.sha256(key.encode()).digest()
-        return Fernet(Fernet.generate_key())  # fallback: derive
+            return Fernet(key.encode())
+        # Derive a valid Fernet key from the user-provided key string
+        derived = hashlib.sha256(key.encode()).digest()
+        fernet_key = base64.urlsafe_b64encode(derived)
+        return Fernet(fernet_key)
     except ImportError:
         return None
 

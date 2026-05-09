@@ -30,7 +30,7 @@ class ContextBudget:
     def validate(self):
         allocated = self.system_prompt + self.memory + self.skills + self.code_context + self.conversation + self.response_reserve
         if allocated > self.total_tokens:
-            raise ValueError(f"Budget overallocated: {allocated} > {total}")
+            raise ValueError(f"Budget overallocated: {allocated} > {self.total_tokens}")
 
 
 class TokenCounter:

@@ -63,7 +63,7 @@ class NexusConfig(BaseModel):
     plugins: PluginConfig = Field(default_factory=PluginConfig)
     web: WebConfig = Field(default_factory=WebConfig)
     system_prompt: Optional[str] = None
-    version: str = "0.2.0"
+    version: str = "1.0.0"
 
 
 def load_config(path: Optional[str] = None) -> NexusConfig:

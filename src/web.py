@@ -24,7 +24,7 @@ def create_app() -> "Optional[FastAPI]":
     if not HAS_WEB:
         return None
 
-    app = FastAPI(title="NexusAgent Dashboard", version="0.2.0")
+    app = FastAPI(title="NexusAgent Dashboard", version="1.0.0")
     config = get_config()
 
     @app.get("/", response_class=HTMLResponse)

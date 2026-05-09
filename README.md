@@ -12,13 +12,10 @@
 
 <p align="center">
   <a href="https://github.com/rudra496/nexus-agent/releases"><img src="https://img.shields.io/github/v/release/rudra496/nexus-agent?style=flat-square&color=cyan" alt="Version"/></a>
-  <a href="https://pypi.org/project/nexus-agent/"><img src="https://img.shields.io/pypi/dm/nexus-agent?style=flat-square&color=blue" alt="Downloads"/></a>
   <a href="https://github.com/rudra496/nexus-agent/stargazers"><img src="https://img.shields.io/github/stars/rudra496/nexus-agent?style=flat-square&color=yellow" alt="Stars"/></a>
   <a href="https://github.com/rudra496/nexus-agent/actions"><img src="https://img.shields.io/github/actions/workflow/status/rudra496/nexus-agent/ci.yml?style=flat-square&label=CI" alt="CI"/></a>
-  <a href="https://codecov.io/gh/rudra496/nexus-agent"><img src="https://img.shields.io/codecov/c/gh/rudra496/nexus-agent?style=flat-square" alt="Coverage"/></a>
   <a href="https://pypi.org/project/nexus-agent/"><img src="https://img.shields.io/pypi/pyversions/nexus-agent?style=flat-square" alt="Python"/></a>
   <a href="https://github.com/rudra496/nexus-agent/blob/main/LICENSE"><img src="https://img.shields.io/github/license/rudra496/nexus-agent?style=flat-square" alt="License"/></a>
-  <a href="https://github.com/rudra496/nexus-agent/pulls"><img src="https://img.shields.io/github/issues-pr/rudra496/nexus-agent?style=flat-square&color=purple" alt="PRs"/></a>
   <a href="https://github.com/rudra496/nexus-agent/issues"><img src="https://img.shields.io/github/issues/rudra496/nexus-agent?style=flat-square" alt="Issues"/></a>
 </p>
 
@@ -34,6 +31,26 @@
 
 ---
 
+## Table of Contents
+
+- [Features](#features)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [CLI Reference](#cli-reference)
+- [Configuration](#configuration)
+- [Plugin System](#plugin-system)
+- [API Reference](#api-reference)
+- [Enterprise Features](#enterprise-features)
+- [Comparison](#comparison)
+- [Performance](#performance)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
+---
+
 ## ✨ Features
 
 - 🧠 **GraphRAG Memory** — Persistent knowledge graph using NetworkX for intelligent context retrieval
@@ -44,6 +61,10 @@
 - 🔒 **Privacy-First** — Local-first execution with Ollama. Optional cloud models via LiteLLM.
 - ⚡ **Zero Config** — Works out of the box with Ollama; configurable when you need it
 - 📦 **Sandboxed Execution** — Isolated skill execution with timeouts and memory limits
+- 🤖 **Multi-Agent System** — Orchestrate multiple agents with task delegation and role-based routing
+- 🛡️ **Enterprise Security** — Encrypted cloud sync (Fernet), audit logging with RBAC
+- 🎤 **Voice Interface** — Speech-to-text (Whisper) and text-to-speech integration
+- 💻 **IDE Integration** — JSON-RPC server for VS Code, JetBrains, and other editors
 - 🚀 **Self-Updating** — Check for new versions, auto-update skills from a registry
 - 💾 **Export System** — Export skills, graphs, and reports as JSON, Markdown, or skill packs
 - 🎯 **Multi-Model** — Works with any model via LiteLLM (Ollama, OpenAI, Anthropic, etc.)
@@ -87,11 +108,6 @@ pip install nexus-agent
 pipx install nexus-agent
 ```
 
-### Conda
-```bash
-conda install -c conda-forge nexus-agent
-```
-
 ### Docker
 ```bash
 docker pull rudra496/nexus-agent
@@ -104,6 +120,8 @@ git clone https://github.com/rudra496/nexus-agent.git
 cd nexus-agent
 pip install -e .
 ```
+
+> **Requires:** Python 3.10+ and [Ollama](https://ollama.ai/) for local models (optional for cloud models).
 
 ## 🚀 Quick Start
 
@@ -120,7 +138,7 @@ nexus run "Create a Python function to calculate Fibonacci numbers"
 # 4. Check status
 nexus status
 
-# 5. Trigger self-evolution
+# 5. Trigger self-evolution — scans your workspace and builds GraphRAG memory
 nexus evolve
 
 # 6. View generated skills
@@ -155,6 +173,10 @@ nexus skills
 | `nexus marketplace list` | List all available marketplace skills |
 | `nexus benchmark run` | Run all performance benchmarks |
 | `nexus benchmark compare <f1> <f2>` | Compare two benchmark files |
+| `nexus agents register <name> --role coder` | Register a new agent |
+| `nexus agents status` | Show multi-agent system status |
+| `nexus voice` | Voice interface: listen and respond |
+| `nexus analyze [path]` | AST-aware code analysis |
 | `nexus mobile` | Start mobile companion API server |
 
 ## ⚙ Configuration
@@ -218,11 +240,11 @@ See [docs/plugin-guide.md](docs/plugin-guide.md) for the full plugin development
 ## 📖 API Reference
 
 ```python
-from nexus.agent import NexusAgent
-from nexus.config import load_config, save_config
-from nexus.plugins import PluginManager
-from nexus.export import export_skills_json, export_markdown_report
-from nexus.sandbox import Sandbox
+from src.agent import NexusAgent
+from src.config import load_config, save_config
+from src.plugins import PluginManager
+from src.export import export_skills_json, export_markdown_report
+from src.sandbox import Sandbox
 
 # Create agent with custom model
 agent = NexusAgent(model="ollama/codellama")
@@ -244,7 +266,7 @@ result = sandbox.execute("print('Hello from sandbox!')")
 
 See [docs/api-reference.md](docs/api-reference.md) for complete API docs.
 
-## 🔐 Enterprise
+## 🔐 Enterprise Features
 
 NexusAgent includes enterprise-grade features for team deployments:
 
@@ -252,18 +274,6 @@ NexusAgent includes enterprise-grade features for team deployments:
 - **RBAC** — Role-based access control with admin, user, and viewer roles
 - **Encrypted Sync** — Fernet symmetric encryption for all synced data
 - **CLI:** `nexus audit log`, `nexus audit stats`, `nexus sync push/pull/status`
-
-## 🏪 Marketplace
-
-Discover and install community-built skills from the built-in marketplace:
-
-```bash
-nexus marketplace list                    # Browse all skills
-nexus marketplace search "docker"         # Search by keyword
-nexus marketplace install docker_builder   # Install a skill
-```
-
-Categories: code-quality, data-processing, devops, research, web, security.
 
 ## 📊 Comparison
 
@@ -280,6 +290,19 @@ Categories: code-quality, data-processing, devops, research, web, security.
 | **Open Source (MIT)** | ✅ | ✅ | ✅ (Apache) | ❌ | ✅ |
 
 > ⚠️ = Requires some configuration. This comparison reflects publicly available documentation as of April 2026 and is provided in good faith — please verify for your specific use case.
+
+## ⚡ Performance
+
+NexusAgent is designed for minimal overhead. Key performance characteristics:
+
+| Component | Design Target | Notes |
+|-----------|--------------|-------|
+| Startup | Near-instant | Only loads config + existing skills |
+| Graph Retrieval | Proportional to graph size | Keyword-based lookup over NetworkX |
+| Skill Execution | Bounded by sandbox timeout | Configurable, default 30s |
+| Plugin Load | On-demand | Loaded once, hot-reloaded on change |
+
+> Run `nexus benchmark run` to measure actual performance on your hardware. Use `nexus benchmark compare` to track regressions across versions.
 
 ## 🗺 Roadmap
 
@@ -299,7 +322,7 @@ See [docs/roadmap.md](docs/roadmap.md) for the full roadmap.
 - [x] Export system (JSON, Markdown, ZIP skill packs)
 - [x] Self-updater + skill registry
 - [x] Docker support
-- [x] CI/CD + 40+ tests
+- [x] CI/CD + tests
 
 ### ✅ v0.3 — Multi-Agent
 - [x] Multi-agent orchestration engine
@@ -314,9 +337,7 @@ See [docs/roadmap.md](docs/roadmap.md) for the full roadmap.
 - [x] IDE integration base (JSON-RPC, VS Code manifest, JetBrains ready)
 - [x] AST-aware code memory (functions, classes, imports, dependencies)
 - [x] Context window management (token budgeting, priority selection)
-- [x] Inline code suggestions (completion, diagnostics API)
 - [x] `nexus voice` and `nexus analyze` CLI commands
-- [x] 90+ total tests
 
 ### ✅ v1.0 — Production
 - [x] Encrypted cloud sync (Fernet, local/S3/WebDAV, delta sync)
@@ -324,8 +345,7 @@ See [docs/roadmap.md](docs/roadmap.md) for the full roadmap.
 - [x] Skill marketplace (search, install, rate, 6 categories)
 - [x] Performance benchmark suite (4 benchmarks, compare runs)
 - [x] Mobile companion API (REST + JWT, mobile web UI)
-- [x] New CLI commands: `sync`, `audit`, `marketplace`, `benchmark`, `mobile`
-- [x] 140+ tests, 50 GitHub topics
+- [x] 140+ tests across all modules
 
 ## 🤝 Contributing
 
@@ -339,18 +359,13 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 Please read our [Code of Conduct](CODE_OF_CONDUCT.md) and [Security Policy](SECURITY.md).
 
-## ⚡ Performance
+## 🐛 Troubleshooting
 
-NexusAgent is designed for minimal overhead. Key performance characteristics:
+**Ollama not running?** Start it with `ollama serve` or verify it's running at `http://localhost:11434`.
 
-| Component | Design Target | Notes |
-|-----------|--------------|-------|
-| Startup | Near-instant | Only loads config + existing skills |
-| Graph Retrieval | Proportional to graph size | Keyword-based lookup over NetworkX |
-| Skill Execution | Bounded by sandbox timeout | Configurable, default 30s |
-| Plugin Load | On-demand | Loaded once, hot-reloaded on change |
+**Windows compatibility** — NexusAgent uses `sys.executable` for sandboxed execution, ensuring cross-platform compatibility.
 
-> Run `nexus benchmark run` to measure actual performance on your hardware. Use `nexus benchmark compare` to track regressions across versions.
+**Import errors** — Make sure you installed with `pip install -e ".[all]"` for all optional dependencies.
 
 ## 📄 License
 

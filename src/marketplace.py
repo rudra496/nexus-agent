@@ -54,7 +54,7 @@ class MarketplaceItem:
 class MarketplaceClient:
     """Client for the NexusAgent skill marketplace."""
 
-    DEFAULT_REGISTRY = "https://registry.nexus-agent.dev"
+    DEFAULT_REGISTRY = ""  # Registry URL placeholder — set to a real URL when available
     CACHE_FILE = ".nexus/marketplace_cache.json"
 
     def __init__(self, registry_url: Optional[str] = None, skills_dir: Optional[str] = None, cache_file: Optional[str] = None):

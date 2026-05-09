@@ -279,14 +279,14 @@ NexusAgent includes enterprise-grade features for team deployments:
 
 | Feature | NexusAgent | Aider | Continue.dev | Cursor | OpenHands |
 |---------|-----------|-------|-------------|--------|-----------|
-| **Runs Locally (with Ollama)** | ✅ | ✅ | ✅ | ❌ | ❌ |
+| **Runs Locally (with Ollama)** | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **GraphRAG Memory** | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **Self-Evolving Skills** | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **Plugin System** | ✅ | ❌ | ✅ | ✅ | ✅ |
 | **Web Dashboard** | ✅ | ❌ | ❌ | ✅ | ✅ |
 | **Zero-Config Setup** | ✅ | ⚠️ | ⚠️ | ✅ | ⚠️ |
 | **Sandboxed Execution** | ✅ | ❌ | ❌ | ❌ | ✅ |
-| **CLI Interface** | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **CLI Interface** | ✅ | ✅ | ✅ | ❌ | ✅ |
 | **Open Source (MIT)** | ✅ | ✅ | ✅ (Apache) | ❌ | ✅ |
 
 > ⚠️ = Requires some configuration. This comparison reflects publicly available documentation as of April 2026 and is provided in good faith — please verify for your specific use case.

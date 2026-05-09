@@ -173,7 +173,7 @@ class BenchmarkRunner:
             suite2 = BenchmarkSuite.from_dict(json.load(f))
 
         lines = ["# Benchmark Comparison", ""]
-        lines.append(f"| Benchmark | Run 1 (s) | Run 2 (s) | Change |")
+        lines.append("| Benchmark | Run 1 (s) | Run 2 (s) | Change |")
         lines.append("|-----------|-----------|-----------|--------|")
         for r1, r2 in zip(suite1.results, suite2.results):
             if r1.name == r2.name:

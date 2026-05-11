@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://rudra496.github.io/nexus-agent/sitemap.xml

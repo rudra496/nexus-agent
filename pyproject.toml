@@ -27,7 +27,7 @@ dependencies = [
     "typer>=0.26.7",
     "rich>=13.0.0",
     "litellm>=1.89.0",
-    "requests>=2.31.0",
+    "requests>=2.34.2",
     "networkx>=3.4.2",
     "pydantic>=2.13.4,<3.0.0",
 ]

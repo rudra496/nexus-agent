@@ -9,6 +9,7 @@ import json
 import os
 import time
 import hashlib
+import secrets
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -33,7 +34,23 @@ class TaskStatus:
 
 
 def _hash_password(pw: str) -> str:
-    return hashlib.sha256(pw.encode()).hexdigest()
+    """Salted PBKDF2 password hash (resistant to brute force, unlike plain sha256)."""
+    iterations = 200_000
+    salt = secrets.token_bytes(16)
+    derived = hashlib.pbkdf2_hmac("sha256", pw.encode(), salt, iterations)
+    return f"pbkdf2_sha256${iterations}${salt.hex()}${derived.hex()}"
+
+
+def _verify_password(pw: str, stored: str) -> bool:
+    """Constant-time verification of a password against a stored PBKDF2 hash."""
+    try:
+        algo, iters, salt_hex, hash_hex = stored.split("$")
+    except ValueError:
+        return False
+    if algo != "pbkdf2_sha256":
+        return False
+    derived = hashlib.pbkdf2_hmac("sha256", pw.encode(), bytes.fromhex(salt_hex), int(iters))
+    return secrets.compare_digest(derived.hex(), hash_hex)
 
 
 def _generate_jwt(payload: dict, secret: str) -> str:
@@ -113,7 +130,7 @@ class MobileAPI:
 
     def authenticate(self, username: str, password: str) -> Optional[str]:
         user = self._users.get(username)
-        if user and user["password_hash"] == _hash_password(password):
+        if user and _verify_password(password, user["password_hash"]):
             payload = {"sub": username, "exp": time.time() + self.config.jwt_expiry_hours * 3600}
             return _generate_jwt(payload, self.config.jwt_secret)
         return None

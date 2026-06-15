@@ -151,7 +151,11 @@ class TextToSpeech:
         if self.config.tts_engine == TTSEngine.EDGE_TTS:
             try:
                 import edge_tts
-                output = output_path or tempfile.mktemp(suffix=".mp3")
+                if output_path:
+                    output = output_path
+                else:
+                    fd, output = tempfile.mkstemp(suffix=".mp3")
+                    os.close(fd)
                 communicate = edge_tts.Communicate(text, self.config.tts_voice)
                 communicate.save(output)
                 return output

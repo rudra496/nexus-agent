@@ -938,10 +938,14 @@ class TestMobile:
         assert data is None or (isinstance(data, dict) and "sub" in data)
 
     def test_password_hash(self):
-        from src.mobile import _hash_password
+        from src.mobile import _hash_password, _verify_password
         h = _hash_password("password")
         assert h != "password"
-        assert _hash_password("password") == h
+        # _hash_password uses a random salt (PBKDF2), so two hashes of the same
+        # password differ. Validate via the constant-time verifier instead.
+        assert h != _hash_password("password")
+        assert _verify_password("password", h) is True
+        assert _verify_password("wrong-password", h) is False
 
     def test_mobile_api_authenticate(self):
         from src.mobile import MobileAPI

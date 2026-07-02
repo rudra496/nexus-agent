@@ -24,7 +24,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
-    "typer>=0.26.7",
+    "typer>=0.26.8",
     "rich>=13.0.0",
     "litellm>=1.89.0",
     "requests>=2.34.2",

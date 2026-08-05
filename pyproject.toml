@@ -59,6 +59,12 @@ line-length = 100
 target-version = "py310"
 exclude = [".nexus", ".git", "__pycache__"]
 
+[tool.ruff.lint]
+# Historical ruff defaults (pre-0.16). Ruff 0.16 expanded the default rule
+# set (UP/BLE/S/DTZ/...), which broke CI on unpinned installs. Keep the lint
+# scope explicit; widen deliberately in a dedicated cleanup PR.
+select = ["E4", "E7", "E9", "F"]
+
 [tool.mypy]
 ignore_missing_imports = true
 exclude = [".nexus", "tests"]

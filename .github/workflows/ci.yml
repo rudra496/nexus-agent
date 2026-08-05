@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install dependencies
-        run: pip install ruff mypy
+        run: pip install ruff==0.16.1 mypy==2.3.0
       - name: Lint with ruff
         run: ruff check src/ --ignore E501,F401,F841,E402
       - name: Type check

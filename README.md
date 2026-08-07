@@ -75,6 +75,9 @@ graph TB
     style Plugins fill:#f59e0b,color:#fff
 ```
 
+### 🎯 Alignment with AGI Infrastructure
+NexusAgent is designed as an agent-native infrastructure layer capable of managing complex, asynchronous workflows across heterogeneous compute environments. It serves as a foundational "OS" layer for AI, aligning with next-generation paradigms where Large Language Models act as the central processing unit across distributed terminals. It features built-in context window management for persistent multi-agent memory and scales seamlessly.
+
 ## 📦 Installation
 
 ### pip (Recommended)

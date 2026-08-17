@@ -1,6 +1,6 @@
 typer>=0.27.1
 rich>=13.0.0
-litellm>=1.96.0
+litellm>=1.96.2
 requests>=2.34.2
 networkx>=3.4.2
 pydantic>=2.13.4

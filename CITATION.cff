@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use Nexus Agent or reference its multi-agent orchestration architecture, please cite it as below."
+title: "Nexus Agent: Autonomous Multi-Agent Orchestration Framework and Local GraphRAG Architecture"
+authors:
+  - family-names: "Sarker"
+    given-names: "Rudra"
+    affiliation: "Shahjalal University of Science and Technology, Bangladesh"
+    orcid: "https://orcid.org/0009-0001-4545-0932"
+abstract: "Nexus Agent is an open-source autonomous agent framework enabling multi-agent orchestration, GraphRAG knowledge graphs, and tool synthesis running 100% locally with Ollama runtime and zero external API dependencies."
+version: "1.0.0"
+date-released: "2026-08-26"
+license: "MIT"
+repository-code: "https://github.com/rudra496/nexus-agent"
+url: "https://rudra496.github.io/nexus-agent"
+keywords:
+  - "ai-agents"
+  - "multi-agent-systems"
+  - "graphrag"
+  - "local-llm"
+  - "ollama"
+  - "autonomous-agents"
+  - "open-source"

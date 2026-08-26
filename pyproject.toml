@@ -30,6 +30,7 @@ dependencies = [
     "requests>=2.34.2",
     "networkx>=3.4.2",
     "pydantic>=2.13.4,<3.0.0",
+    "typing-extensions>=4.8.0",
 ]
 
 [project.optional-dependencies]

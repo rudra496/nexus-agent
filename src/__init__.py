@@ -2,6 +2,18 @@
 
 __version__ = "1.0.0"
 
+import sys
+import typing
+
+# Compatibility polyfill for Python <3.11 where NotRequired lives in typing_extensions
+if sys.version_info < (3, 11):
+    try:
+        import typing_extensions
+        if not hasattr(typing, "NotRequired"):
+            typing.NotRequired = typing_extensions.NotRequired
+    except ImportError:
+        pass
+
 from src.agent import NexusAgent
 from src.config import NexusConfig, load_config, save_config
 from src.memory import GraphMemory

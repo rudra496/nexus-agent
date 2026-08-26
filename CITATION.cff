@@ -6,6 +6,7 @@ authors:
     given-names: "Rudra"
     affiliation: "Shahjalal University of Science and Technology, Bangladesh"
     orcid: "https://orcid.org/0009-0001-4545-0932"
+doi: "10.5281/zenodo.22118830"
 abstract: "Nexus Agent is an open-source autonomous agent framework enabling multi-agent orchestration, GraphRAG knowledge graphs, and tool synthesis running 100% locally with Ollama runtime and zero external API dependencies."
 version: "1.0.0"
 date-released: "2026-08-26"

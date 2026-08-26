@@ -12,6 +12,7 @@
 
 <p align="center">
   <a href="https://github.com/rudra496/nexus-agent/releases"><img src="https://img.shields.io/github/v/release/rudra496/nexus-agent?style=flat-square&color=cyan" alt="Version"/></a>
+  <a href="https://doi.org/10.5281/zenodo.22118830"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.22118830.svg" alt="DOI"/></a>
   <a href="https://github.com/rudra496/nexus-agent/stargazers"><img src="https://img.shields.io/github/stars/rudra496/nexus-agent?style=flat-square&color=yellow" alt="Stars"/></a>
   <a href="https://github.com/rudra496/nexus-agent/actions"><img src="https://img.shields.io/github/actions/workflow/status/rudra496/nexus-agent/ci.yml?style=flat-square&label=CI" alt="CI"/></a>
   <a href="https://pypi.org/project/nexus-agent/"><img src="https://img.shields.io/pypi/pyversions/nexus-agent?style=flat-square" alt="Python"/></a>

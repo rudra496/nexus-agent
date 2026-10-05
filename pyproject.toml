@@ -37,9 +37,9 @@ dependencies = [
 web = ["fastapi>=0.142.2", "uvicorn>=0.54.0"]
 yaml = ["pyyaml>=6.0.3"]
 cloud = ["cryptography>=50.0.2"]
-s3 = ["boto3>=1.43.104"]
+s3 = ["boto3>=1.43.107"]
 jwt = ["PyJWT>=2.15.1"]
-all = ["fastapi>=0.142.2", "uvicorn>=0.54.0", "pyyaml>=6.0.3", "cryptography>=50.0.2", "boto3>=1.43.104", "PyJWT>=2.15.1"]
+all = ["fastapi>=0.142.2", "uvicorn>=0.54.0", "pyyaml>=6.0.3", "cryptography>=50.0.2", "boto3>=1.43.107", "PyJWT>=2.15.1"]
 dev = ["pytest>=7.0", "pytest-cov", "ruff", "mypy"]
 
 [project.scripts]

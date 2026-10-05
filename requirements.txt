@@ -4,6 +4,6 @@ litellm>=1.103.0
 requests>=2.34.2
 networkx>=3.4.2
 pydantic>=2.13.5
-fastapi>=0.141.1
+fastapi>=0.142.2
 uvicorn>=0.54.0
 pyyaml>=6.0.3

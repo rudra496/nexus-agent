@@ -6,4 +6,4 @@ networkx>=3.4.2
 pydantic>=2.14.4
 fastapi>=0.162.5
 uvicorn>=0.54.0
-pyyaml>=6.0.3
+pyyaml>=6.0.4
